@@ -179,5 +179,5 @@ class Command(BaseCommand):
     try:
       hora = Horario.objects.get(codigo=codGrup+'_'+día)
     except Horario.DoesNotExist:
-      hora = Horario.objects.create(codigo=codGrup+'_'+día, grupo=grup, aula=aul, inicio=ini, fin=fin)
+      hora = Horario.objects.create(codigo=codGrup+'_'+día, grupo=grup, aula=aul, inicio=ini, fin=fin, día=día)
       hora.save()
