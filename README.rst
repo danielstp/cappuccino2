@@ -1,7 +1,7 @@
 Cappuccino2
 ===========
 
-Sistema para la visualización decente de horarios para las carreras en la facultad de ciencias y tecnologia.
+Sistema para la visualización decente de horarios para las carreras en la facultad de ciencias y tecnología.
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/

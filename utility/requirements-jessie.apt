@@ -22,3 +22,7 @@ libwebp-dev
 
 ##django-extensions
 graphviz-dev
+
+##pdf
+poppler-utils
+sed
