@@ -8,9 +8,10 @@ import urllib.request
 import os, datetime, time
 import calendar
 import pdfquery
+import time
 
 from django.utils import timezone
-from cappuccino2.horario.models import Carrera
+from cappuccino2.horario.models import Carrera, Docente, Ayudante, Aula, Grupo, Horario, Materia
 from django.conf import settings
 from django.core.management.base import BaseCommand, CommandError
 from parsel import Selector
@@ -20,6 +21,7 @@ from pdfquery.cache import FileCache
 class Command(BaseCommand):
   help = 'Actualizar Horarios'
   patronCodigo = re.compile(r'^(\d+)\s+(.*)$')
+  patronHora = re.compile(r'(\d{1,2})(\d{2})$')
   patronFecha = '%H:%M %d-%m-%Y'
   patronFechaApache = "%a, %d %b %Y %H:%M:%S %Z"
 
@@ -107,16 +109,75 @@ class Command(BaseCommand):
     expD = re.compile(r'\s+'+expBase)
     base = ruta
     p = subprocess.run(['pdftotext', '-layout', '-nopgbrk', base+'.pdf'], stdout=subprocess.PIPE)
-    print(p)
     p = subprocess.run(['sed', '-i', "s/¥/Ñ/g", base+'.txt'], stdout=subprocess.PIPE)
-    print(p)
 
     for linea in fileinput.input(base+'.txt'):
         datoA = expA.findall(linea)
         datoD = expD.findall(linea)
+
         if(len(datoA)>0):
-          print('ayudante '+str(datoA))
-          
+          #print('ayudante '+str(datoA[0]))
+          codigo = datoA[0][0]
+          materia = datoA[0][1].strip()
+          grupo = datoA[0][2]
+          día = datoA[0][3]
+          inicia = datoA[0][4]
+          termina = datoA[0][5]
+          aula = datoA[0][6]
+          ayudante = datoA[0][7]
+          self.creaMateria(materia, False, self.crea(Ayudante, ayudante), codigo, grupo, aula, inicia, termina, día)
         if(len(datoD)>0):
-          print('docente '+str(datoD))
-        
+          #print('docente '+str(datoD[0]))
+          codigo = datoD[0][0]
+          materia = datoD[0][1].strip()
+          grupo = datoD[0][2]
+          día = datoD[0][3]
+          inicia = datoD[0][4]
+          termina = datoD[0][5]
+          aula = datoD[0][6]
+          docente = datoD[0][7]
+
+          self.creaMateria(materia,True, self.crea(Docente, docente), codigo, grupo, aula, inicia, termina, día)
+
+  def crea(self, tipo, nombre):
+    try:
+      ayudante = tipo.objects.get(nombre=nombre)
+    except tipo.DoesNotExist:
+      ayudante = tipo.objects.create(nombre=nombre)
+      ayudante.save()
+    return ayudante
+
+  def creaMateria(self, materia, docente, obj, codigo, grupo, aula, inicia, termina, día):
+    try:
+      mat = Materia.objects.get(nombre=materia)
+    except Materia.DoesNotExist:
+      mat = Materia.objects.create(nombre=materia,codigo=codigo)
+      mat.save()
+    codGrup=codigo+'_'+grupo
+    try:
+      grup = Grupo.objects.get(codigo=codGrup)
+    except Grupo.DoesNotExist:
+      grup = Grupo.objects.create(codigo=codGrup,materia=mat)
+      grup.save()
+    if(docente):
+      grup.docente=obj
+      grup.save()
+    else:
+      grup.ayudante=obj
+      grup.save()
+    try:
+      aul = Aula.objects.get(codigo=aula)
+    except Aula.DoesNotExist:
+      aul = Aula.objects.create(codigo=aula)
+      aul.save
+    iniT = self.patronHora.findall(inicia)[0]
+    ini = iniT[0]+':'+iniT[1]
+    finT = self.patronHora.findall(termina)[0]
+    fin = finT[0]+':'+finT[1]
+    #ini = time.strptime(inicia, "%H%M")
+    #fin = time.strptime(termina, "%H%M")
+    try:
+      hora = Horario.objects.get(codigo=codGrup+'_'+día)
+    except Horario.DoesNotExist:
+      hora = Horario.objects.create(codigo=codGrup+'_'+día, grupo=grup, aula=aul, inicio=ini, fin=fin)
+      hora.save()

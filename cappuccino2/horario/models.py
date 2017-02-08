@@ -25,7 +25,7 @@ class Ayudante(models.Model):
 
 class Materia(models.Model):
     nombre = models.CharField(max_length=255)
-
+    codigo = models.IntegerField(primary_key=True)
 
 class Aula(models.Model):
     codigo = models.CharField(max_length=25,primary_key=True)
@@ -39,7 +39,9 @@ class Grupo(models.Model):
 
 
 class Horario(models.Model):
+    codigo = models.CharField(max_length=25,primary_key=True)
     día = models.CharField(max_length=2,choices=DÍA_SEMANA)
     inicio = models.TimeField()
     fin = models.TimeField()
     aula = models.ForeignKey(Aula)
+    grupo = models.ForeignKey(Grupo)
