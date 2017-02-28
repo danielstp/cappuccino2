@@ -43,7 +43,8 @@ class Migration(migrations.Migration):
             name='Horario',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('día', models.CharField(choices=[('1', 'LU'), ('2', 'MA'), ('3', 'MI'), ('4', 'JU'), ('5', 'VI'), ('6', 'SA'), ('7', 'DO')], max_length=2)),
+                ('día', models.CharField(choices=[('1', 'LU'), ('2', 'MA'), ('3', 'MI'),
+                                                  ('4', 'JU'), ('5', 'VI'), ('6', 'SA'), ('7', 'DO')], max_length=2)),
                 ('inicio', models.TimeField()),
                 ('fin', models.TimeField()),
             ],
