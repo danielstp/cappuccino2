@@ -12,7 +12,7 @@ DÍA_SEMANA = (
 
 
 class Carrera(models.Model):
-    codigo = models.IntegerField(primary_key=True)
+    código = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
     pdf = models.URLField()
     fecha = models.DateTimeField(default='2016-01-01 00:00:00-04')
@@ -20,6 +20,7 @@ class Carrera(models.Model):
 
     def __str__(self):
         return self.nombre
+
 
 class Actualización(models.Model):
     carrera = models.ForeignKey(Carrera)
@@ -46,33 +47,39 @@ class Ayudante(models.Model):
 
 class Materia(models.Model):
     nombre = models.CharField(max_length=255)
-    codigo = models.IntegerField(primary_key=True)
-    nivel = models.CharField(max_length=1)
+    código = models.IntegerField(primary_key=True)
 
     def __str__(self):
         return self.nombre
 
 
+class NivelMateria(models.Model):
+    código = models.CharField(max_length=20, primary_key=True)
+    carrera = models.ForeignKey(Carrera)
+    materia = models.ForeignKey(Materia)
+    nivel = models.CharField(max_length=1)
+
+
 class Aula(models.Model):
-    codigo = models.CharField(max_length=25, primary_key=True)
+    código = models.CharField(max_length=25, primary_key=True)
 
     def __str__(self):
-        return self.codigo
+        return self.código
 
 
 class Grupo(models.Model):
-    codigo = models.CharField(max_length=25, primary_key=True)
+    código = models.CharField(max_length=25, primary_key=True)
     grupo = models.CharField(max_length=2)
     materia = models.ForeignKey(Materia)
     docente = models.ForeignKey(Docente, null=True)
     ayudante = models.ForeignKey(Ayudante, null=True)
 
     def __str__(self):
-        return self.materia.nombre + ' Grupo:' + self.codigo
+        return self.materia.nombre + ' Grupo:' + self.código
 
 
 class Horario(models.Model):
-    codigo = models.CharField(max_length=25, primary_key=True)
+    código = models.CharField(max_length=25, primary_key=True)
     día = models.CharField(max_length=2, choices=DÍA_SEMANA)
     inicio = models.TimeField()
     fin = models.TimeField()
@@ -80,4 +87,4 @@ class Horario(models.Model):
     grupo = models.ForeignKey(Grupo)
 
     def __str__(self):
-        return self.grupo.materia.nombre + ' Grupo:' + self.codigo
+        return self.grupo.materia.nombre + ' Grupo:' + self.código
