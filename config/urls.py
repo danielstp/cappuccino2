@@ -4,8 +4,6 @@ from django.contrib import admin
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import include, path
 from django.views import defaults as default_views
-from cappuccino2.users.models import User
-from rest_framework import routers, serializers, viewsets
 
 # Serializers define the API representation.
 
@@ -41,7 +39,6 @@ urlpatterns = [
     path("users/", include("cappuccino2.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^horario/', include('cappuccino2.horario.urls', namespace='horario')),
 
 
