@@ -1,17 +1,17 @@
-from cappuccino2.users.models import User
-from django.contrib.auth.models import Group
+from cappuccino2.horario.models import Carrera, Materia
+#from django.contrib.auth.models import Group
 from rest_framework import serializers
 
 
-class UserSerializer(serializers.HyperlinkedModelSerializer):
+class CarreraSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = User
-        fields = ('url', 'username', 'email', 'groups')
+        model = Carrera
+        fields = ('código', 'nombre')
 
 
-class GroupSerializer(serializers.HyperlinkedModelSerializer):
+class MateriaSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
-        model = Group
-        fields = ('url', 'name')
+        model = Materia
+        fields = ('código', 'nombre')
