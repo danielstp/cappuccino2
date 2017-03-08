@@ -2,16 +2,16 @@ from django.shortcuts import render
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from cappuccino2.horario.models import Carrera, Materia
+from cappuccino2.horario.models import Carrera, NivelMateria, Materia
 #from django.contrib.auth.models import Group
 
 from rest_framework import viewsets
-from cappuccino2.horario.serializers import CarreraSerializer, MateriaSerializer
+from cappuccino2.horario.serializers import CarreraSerializer, NivelMateriaSerializer, MateriaSerializer
 
 
 class CarreraViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows users to be viewed or edited.
+    API endpoint 
     """
     queryset = Carrera.objects.all().order_by('nombre')
     serializer_class = CarreraSerializer
@@ -19,10 +19,18 @@ class CarreraViewSet(viewsets.ModelViewSet):
 
 class MateriaViewSet(viewsets.ModelViewSet):
     """
-    API endpoint that allows groups to be viewed or edited.
+    API endpoint 
     """
     queryset = Materia.objects.all()
     serializer_class = MateriaSerializer
+
+
+class NivelMateriaViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint
+    """
+    queryset = NivelMateria.objects.all()
+    serializer_class = NivelMateriaSerializer
 
 
 class HorarioListView(LoginRequiredMixin, ListView):
