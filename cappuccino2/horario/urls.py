@@ -9,6 +9,7 @@ from . import views
 router = routers.DefaultRouter()
 router.register(r'carreras', views.CarreraViewSet)
 router.register(r'materias', views.MateriaViewSet)
+router.register(r'nivel', views.NivelMateriaViewSet)
 
 
 urlpatterns = [
