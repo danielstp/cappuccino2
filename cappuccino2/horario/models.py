@@ -23,7 +23,7 @@ class Carrera(models.Model):
 
 
 class Actualización(models.Model):
-    carrera = models.ForeignKey(Carrera)
+    carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
     fecha = models.DateTimeField(default='2016-01-01 00:00:00-04')
     fechaPDF = models.DateTimeField(default='2016-01-01 00:00:00-04')
 
@@ -55,8 +55,8 @@ class Materia(models.Model):
 
 class NivelMateria(models.Model):
     código = models.CharField(max_length=20, primary_key=True)
-    carrera = models.ForeignKey(Carrera)
-    materia = models.ForeignKey(Materia)
+    carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
+    materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
     nivel = models.CharField(max_length=1)
 
 
@@ -70,9 +70,9 @@ class Aula(models.Model):
 class Grupo(models.Model):
     código = models.CharField(max_length=25, primary_key=True)
     grupo = models.CharField(max_length=2)
-    materia = models.ForeignKey(Materia)
-    docente = models.ForeignKey(Docente, null=True)
-    ayudante = models.ForeignKey(Ayudante, null=True)
+    materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
+    docente = models.ForeignKey(Docente, null=True, on_delete=models.PROTECT)
+    ayudante = models.ForeignKey(Ayudante, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.materia.nombre + ' Grupo:' + self.código
@@ -83,8 +83,8 @@ class Horario(models.Model):
     día = models.CharField(max_length=2, choices=DÍA_SEMANA)
     inicio = models.TimeField()
     fin = models.TimeField()
-    aula = models.ForeignKey(Aula)
-    grupo = models.ForeignKey(Grupo)
+    aula = models.ForeignKey(Aula, on_delete=models.PROTECT)
+    grupo = models.ForeignKey(Grupo, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.grupo.materia.nombre + ' Grupo:' + self.código
