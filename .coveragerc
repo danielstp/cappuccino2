@@ -1,5 +1,10 @@
 [run]
-include = cappuccino2/*
-omit = *migrations*, *tests*
-plugins =
-    django_coverage_plugin
+branch = True
+omit = *migrations*,
+       *urls*,
+       *test*,
+       *admin*,
+       ./manage.py,
+       ./cappuccino2/config/*,
+       ./cappuccino2/wsgi.py,
+       *__init__*
