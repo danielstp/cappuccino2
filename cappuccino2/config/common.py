@@ -54,8 +54,8 @@ class Common(Configuration):
     # Postgres
     DATABASES = {
         'default': dj_database_url.config(
-            #default='postgres://postgres:@postgres:5432/postgres',
-            default='sqlite:///dbCappuccino.sqlite',
+            default='postgres://@/cappuccino2',
+            #default='sqlite:///dbCappuccino.sqlite',
             conn_max_age=int(os.getenv('POSTGRES_CONN_MAX_AGE', 600))
         )
     }
