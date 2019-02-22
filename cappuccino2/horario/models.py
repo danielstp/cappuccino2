@@ -20,6 +20,8 @@ class Carrera(models.Model):
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ('nombre',)
 
 
 class Actualización(models.Model):
@@ -30,12 +32,16 @@ class Actualización(models.Model):
     def __str__(self):
         return self.carrera.nombre + self.fecha
 
+    class Meta:
+        ordering = ('fecha',)
 
 class Docente(models.Model):
     nombre = models.CharField(max_length=255)
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ('nombre',)
 
 
 class Ayudante(models.Model):
@@ -43,6 +49,8 @@ class Ayudante(models.Model):
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ('nombre',)
 
 
 class Materia(models.Model):
@@ -51,6 +59,8 @@ class Materia(models.Model):
 
     def __str__(self):
         return self.nombre
+    class Meta:
+        ordering = ('nombre',)
 
 
 class NivelMateria(models.Model):
@@ -59,12 +69,17 @@ class NivelMateria(models.Model):
     materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
     nivel = models.CharField(max_length=1)
 
+    class Meta:
+        ordering = ('carrera', 'nivel', 'materia',)
 
 class Aula(models.Model):
     código = models.CharField(max_length=25, primary_key=True)
 
     def __str__(self):
         return self.código
+    class Meta:
+        ordering = ('código',)
+
 
 
 class Grupo(models.Model):
@@ -76,6 +91,9 @@ class Grupo(models.Model):
 
     def __str__(self):
         return self.materia.nombre + ' Grupo:' + self.código
+    class Meta:
+        ordering = ('grupo',)
+
 
 
 class Horario(models.Model):
@@ -88,3 +106,7 @@ class Horario(models.Model):
 
     def __str__(self):
         return self.grupo.materia.nombre + ' Grupo:' + self.código
+    class Meta:
+        ordering = ('grupo',)
+
+

@@ -10,7 +10,12 @@ router = routers.DefaultRouter()
 router.register(r'carreras', views.CarreraViewSet)
 router.register(r'materias', views.MateriaViewSet)
 router.register(r'nivel', views.NivelMateriaViewSet)
-
+router.register(r'actualización', views.ActualizaciónViewSet)
+router.register(r'docente', views.DocenteViewSet)
+router.register(r'ayudante', views.AyudanteViewSet)
+router.register(r'aula', views.AulaViewSet)
+router.register(r'grupo', views.GrupoViewSet)
+router.register(r'horario', views.HorarioViewSet)
 
 urlpatterns = [
     url(r'^', include(router.urls)),
