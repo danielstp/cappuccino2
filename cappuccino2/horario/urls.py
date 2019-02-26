@@ -5,8 +5,9 @@ from django.conf.urls import url, include
 from rest_framework import routers
 
 from . import views
+from .. import urls as urlsRoot
 
-router = routers.DefaultRouter()
+router = urlsRoot.router
 router.register(r'carreras', views.CarreraViewSet)
 router.register(r'materias', views.MateriaViewSet)
 router.register(r'nivel', views.NivelMateriaViewSet)
@@ -17,11 +18,3 @@ router.register(r'aula', views.AulaViewSet)
 router.register(r'grupo', views.GrupoViewSet)
 router.register(r'horario', views.HorarioViewSet)
 
-urlpatterns = [
-    url(r'^', include(router.urls)),
-    url(
-        regex=r'^$',
-        view=views.HorarioListView.as_view(),
-        name='list'
-    ),
-]
