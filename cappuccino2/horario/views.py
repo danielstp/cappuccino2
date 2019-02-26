@@ -29,6 +29,7 @@ class MateriaViewSet(viewsets.ModelViewSet):
     """
     queryset = Materia.objects.all()
     serializer_class = MateriaSerializer
+    filter_fields  = ('código','nombre',)
 
 
 class NivelMateriaViewSet(viewsets.ModelViewSet):
@@ -37,6 +38,7 @@ class NivelMateriaViewSet(viewsets.ModelViewSet):
     """
     queryset = NivelMateria.objects.all()
     serializer_class = NivelMateriaSerializer
+    filter_fields  = ('materia', 'carrera', 'materia__nombre','carrera__nombre','nivel',)
 
 
 class HorarioListView(LoginRequiredMixin, ListView):
