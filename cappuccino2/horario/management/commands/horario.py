@@ -96,7 +96,7 @@ class Command(BaseCommand):
             objCarrera.fechaPDF = fecha
             self.stdout.write(self.style.WARNING('PDFNuevo ' + objCarrera.fechaPDF.strftime('%Y-%m-%d_%H:%M:%S %z %Z')))
             if(not os.path.exists(settings.STATIC_ROOT + '/' + objCarrera.nombre + '_' + código)):
-                os.mkdir(settings.STATIC_ROOT + '/' + objCarrera.nombre + '_' + código)
+                os.makedirs(settings.STATIC_ROOT + '/' + objCarrera.nombre + '_' + código, exist_ok=True)
             with open(settings.STATIC_ROOT + '/' + objCarrera.nombre + '_' + código + '/' + objCarrera.fechaPDF.strftime('%Y-%m-%d_%H:%M:%S') + '.pdf', 'wb') as f:
                 c = pycurl.Curl()
                 c.setopt(c.URL, objCarrera.pdf)
