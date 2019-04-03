@@ -37,13 +37,11 @@ coverage==4.5.2
 django-storages==1.7.1
 boto3==1.9.93
 
-scrapy
+scrapy==1.6.0
 
-pycurl
-requests
-django-extensions
-django-nose
-sqlparse
-Werkzeug
-requests
-lxml
+pycurl==7.43.0.2
+requests==2.21.0
+django-extensions==2.1.6
+sqlparse==0.3.0
+Werkzeug==0.15.2
+lxml==4.3.3
