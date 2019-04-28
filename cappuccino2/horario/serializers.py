@@ -16,7 +16,7 @@ class MateriaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Materia
-        fields = ('__all__')
+        fields = ('código', 'nombre')
 
 
 class NivelMateriaSerializer(serializers.ModelSerializer):

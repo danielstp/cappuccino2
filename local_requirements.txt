@@ -1,5 +1,11 @@
 # Local development dependencies go here
 -r requirements.txt
 
-django-extensions>=1.7.7
-Werkzeug
+# Developer Tools
+ipdb==0.11
+ipython==7.3.0
+mkdocs==1.0.4
+flake8==3.7.5
+
+django-extensions==2.1.6
+Werkzeug==0.14.1

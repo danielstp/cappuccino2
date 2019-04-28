@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Car } from '../../components/domain/car';
-import { CarService } from '../../service/carservice';
+import { Car } from './domain/car';
+import { CarService } from './service/carservice';
+import { TableModule } from 'primeng/table';
 
 @Component({
   selector: 'app-horario',

@@ -21,15 +21,13 @@ class CarreraViewSet(viewsets.ModelViewSet):
     filter_fields  = ('código','nombre','pdf','fecha','fechaPDF',)
 
 
-
-
 class MateriaViewSet(viewsets.ModelViewSet):
     """
     API endpoint
     """
     queryset = Materia.objects.all()
     serializer_class = MateriaSerializer
-    filter_fields  = ('código','nombre',)
+    filter_fields  = ('código','nombre', 'carrera__nombre',)
 
 
 class NivelMateriaViewSet(viewsets.ModelViewSet):

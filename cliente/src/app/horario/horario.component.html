@@ -1,12 +1,3 @@
-<table-submenu></table-submenu>
-
-<div class="content-section introduction">
-  <div>
-    <span class="feature-title">Table - <span class="subitem">Style</span></span>
-    <span>Certain rows or cell can easily be styled based on conditions.</span>
-  </div>
-</div>
-
 <div class="content-section implementation">
   <p-table [columns]="cols" [value]="cars">
     <ng-template pTemplate="header" let-columns>
@@ -26,43 +17,4 @@
   </p-table>
 </div>
 
-<div class="content-section documentation">
-  <p-tabView effect="fade">
-    <p-tabPanel header="tablestyledemo.ts">
-      <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/table/tablestyledemo.ts" class="btn-viewsource" target="_blank">
-        <i class="fa fa-github"></i>
-        <span>View on GitHub</span>
-      </a>
-      <pre>
 
-      </pre>
-    </p-tabPanel>
-
-    <p-tabPanel header="tablestyledemo.html">
-      <a href="https://github.com/primefaces/primeng/tree/master/src/app/showcase/components/table/tablestyledemo.html" class="btn-viewsource" target="_blank">
-        <i class="fa fa-github"></i>
-        <span>View on GitHub</span>
-      </a>
-      <pre>
-<code class="language-markup" pCode ngNonBindable>
-&lt;p-table [columns]="cols" [value]="cars"&gt;
-    &lt;ng-template pTemplate="header" let-columns&gt;
-        &lt;tr&gt;
-            &lt;th *ngFor="let col of columns"&gt;
-                &#123;&#123;col.header&#125;&#125;
-            &lt;/th&gt;
-        &lt;/tr&gt;
-    &lt;/ng-template&gt;
-    &lt;ng-template pTemplate="body" let-rowData let-columns="columns"&gt;
-        &lt;tr [ngClass]="rowData.year &gt; 2010 ? 'new-car' : null"&gt;
-            &lt;td *ngFor="let col of columns" [ngClass]="rowData[col.field] &lt;= 2010 ? 'old-car' : null"&gt;
-                &#123;&#123;rowData[col.field]&#125;&#125;
-            &lt;/td&gt;
-        &lt;/tr&gt;
-    &lt;/ng-template&gt;
-&lt;/p-table&gt;
-</code>
-      </pre>
-    </p-tabPanel>
-  </p-tabView>
-</div>
