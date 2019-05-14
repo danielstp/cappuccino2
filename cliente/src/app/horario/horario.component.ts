@@ -20,10 +20,13 @@ export class HorarioComponent implements OnInit {
         this.carService.getCarsSmall().then(cars => this.cars = cars);
 
         this.cols = [
-            { field: 'vin', header: 'Vin' },
-            { field: 'year', header: 'Year' },
-            { field: 'brand', header: 'Brand' },
-            { field: 'color', header: 'Color' }
+            { field: 'vin', header: 'Hora' },
+            { field: 'year', header: 'Lunes' },
+            { field: 'brand', header: 'Martes' },
+            { field: 'color', header: 'Miercoles' },
+            { field: 'jueves', header: 'Jueves'},
+            { filed: 'viernes', header: 'Viernes'},
+            { filed: 'sabado', header: 'Sabado'}
         ];
     }
 }
