@@ -43,5 +43,5 @@ pycurl==7.43.0.2
 requests==2.21.0
 django-extensions==2.1.6
 sqlparse==0.3.0
-Werkzeug==0.15.2
+Werkzeug==0.15.3
 lxml==4.3.3
