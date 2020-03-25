@@ -51,10 +51,11 @@ class Command(BaseCommand):
             código[tupla[0][0]]['fecha'] = fechas[c]
             c = c + 1
 
-        patronPDF = re.compile(r'(\d+)\.pdf$')
+        patronPDF = re.compile(r'(\d+)\.pdf$',re.MULTILINE)
         for pdf in horariosPDF:
-            pdf1 = patronPDF.findall(pdf)
-            código[pdf1[0]]['pdf'] = pdf
+            codigoCarr=patronPDF.findall(pdf)
+            if len( codigoCarr ) > 0:
+                código[codigoCarr[0]]['pdf'] = pdf
 
         for carrera in código:
             self.stdout.write(self.style.SUCCESS('Carrera:"' + código[carrera]['carrera'] + '"'))
@@ -70,7 +71,8 @@ class Command(BaseCommand):
                     self.stdout.write(self.style.WARNING('Hay Cambios'))
                     objCar.fecha = fecha
                     objCar.nombre = código[carrera]['carrera']
-                    objCar.pdf = código[carrera]['pdf']
+                    if 'pdf' in código[carrera]:
+                        objCar.pdf = código[carrera]['pdf']
                     objCar.save()
                 else:
                     self.stdout.write(self.style.WARNING('Sin Cambios'))
