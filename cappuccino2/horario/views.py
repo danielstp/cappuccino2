@@ -87,6 +87,7 @@ class GrupoViewSet(viewsets.ModelViewSet):
     """
     queryset = Grupo.objects.all()
     serializer_class = GrupoSerializer
+    filter_fields  = ('código','grupo','materia','docente','ayudante')
 
 
 class HorarioViewSet(viewsets.ModelViewSet):
