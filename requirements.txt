@@ -1,47 +1,47 @@
 # Core
-pytz==2018.9
-Django==2.2
+pytz==2019.2
+Django==2.2.5
 django-configurations==2.1
 gunicorn==19.9.0
-newrelic==4.12.0.113
+newrelic==5.0.2.126
 
 # For the persistence stores
 psycopg2-binary==2.7.7
 dj-database-url==0.5.0
 
 # Model Tools
-django-model-utils==3.1.2
+django-model-utils==3.2.0
 django_unique_upload==0.2.1
 
 # Rest apis
-djangorestframework==3.9.2
-Markdown==3.0.1
-django-filter==2.1.0
+djangorestframework==3.10.3
+Markdown==3.1.1
+django-filter==2.2.0
 
 django-crispy-forms==1.7.2
 
 # Developer Tools
-ipdb==0.11
-ipython==7.2.0
+ipdb==0.12.2
+ipython==7.8.0
 mkdocs==1.0.4
-flake8==3.7.5
+flake8==3.7.8
 
 # Testing
-mock==2.0.0
-factory-boy==2.11.1
+mock==3.0.5
+factory-boy==2.12.0
 django-nose==1.4.6
 nose-progressive==1.5.2
-coverage==4.5.2
+coverage==4.5.4
 
 # Static and Media Storage
-django-storages==1.7.1
-boto3==1.9.93
+django-storages==1.7.2
+boto3==1.9.232
 
-scrapy==1.6.0
+scrapy==1.7.3
 
 pycurl==7.43.0.2
-requests==2.21.0
-django-extensions==2.1.6
+requests==2.22.0
+django-extensions==2.2.1
 sqlparse==0.3.0
-Werkzeug==0.15.2
-lxml==4.3.3
+Werkzeug==0.15.6
+lxml==4.4.1
