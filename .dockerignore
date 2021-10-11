@@ -1,3 +1,7 @@
+.*
+!.coveragerc
+!.env
+!.pylintrc
 .editorconfig
 .gitattributes
 .github
