@@ -1,3 +1,7 @@
+.*
+!.coveragerc
+!.env
+!.pylintrc
 .editorconfig
 .gitattributes
 .github
@@ -8,4 +12,3 @@
 .readthedocs.yml
 .travis.yml
 venv
-.git
