@@ -1,20 +1,22 @@
-import uuid
-from django.db import models
-from django.conf import settings
-from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
-from django.db.models.signals import post_save
-from rest_framework.authtoken.models import Token
+from django.db.models import CharField
+from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class User(AbstractUser):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    """Default user for cappuccino2."""
 
-    def __str__(self):
-        return self.username
+    #: First and last name do not cover name patterns around the globe
+    name = CharField(_("Name of User"), blank=True, max_length=255)
+    first_name = None  # type: ignore
+    last_name = None  # type: ignore
 
+    def get_absolute_url(self):
+        """Get url for user's detail view.
 
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def create_auth_token(sender, instance=None, created=False, **kwargs):
-    if created:
-        Token.objects.create(user=instance)
+        Returns:
+            str: URL for user detail.
+
+        """
+        return reverse("users:detail", kwargs={"username": self.username})
