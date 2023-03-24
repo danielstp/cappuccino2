@@ -20,7 +20,6 @@ urlpatterns = [
     url(r'^accounts/', include('allauth.urls')),
 
     # Your stuff: custom urls includes go here
-    url(r'^horario/', include('cappuccino2.horario.urls', namespace='horario')),
 
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

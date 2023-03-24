@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Cappuccino2 documentation build configuration file, created by
+# cappuccino2 documentation build configuration file, created by
 # sphinx-quickstart.
 #
 # This file is execfile()d with the current directory set to its containing dir.
@@ -43,8 +43,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'Cappuccino2'
-copyright = """2017, Daniel Saguez Tezanos Pinto"""
+project = 'cappuccino2'
+copyright = """2023, Daniel Saguez"""
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -188,8 +188,8 @@ latex_elements = {
 latex_documents = [
     ('index',
      'cappuccino2.tex',
-     'Cappuccino2 Documentation',
-     """Daniel Saguez Tezanos Pinto""", 'manual'),
+     'cappuccino2 Documentation',
+     """Daniel Saguez""", 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -218,8 +218,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'cappuccino2', 'Cappuccino2 Documentation',
-     ["""Daniel Saguez Tezanos Pinto"""], 1)
+    ('index', 'cappuccino2', 'cappuccino2 Documentation',
+     ["""Daniel Saguez"""], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -232,9 +232,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    ('index', 'cappuccino2', 'Cappuccino2 Documentation',
-     """Daniel Saguez Tezanos Pinto""", 'Cappuccino2',
-     """Sistema para la visualización decente de horarios para las carreras en la facultad de ciencias y tecnologia.""", 'Miscellaneous'),
+    ('index', 'cappuccino2', 'cappuccino2 Documentation',
+     """Daniel Saguez""", 'cappuccino2',
+     """Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón""", 'Miscellaneous'),
 ]
 
 # Documents to append as an appendix to all manuals.
