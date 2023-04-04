@@ -1,5 +1,0 @@
-[run]
-include = cappuccino2/*
-omit = *migrations*, *tests*
-plugins =
-    django_coverage_plugin

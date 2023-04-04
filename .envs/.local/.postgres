@@ -1,0 +1,7 @@
+# PostgreSQL
+# ------------------------------------------------------------------------------
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
+POSTGRES_DB=cappuccino2
+POSTGRES_USER=DanAJEhPPLRqdZWfIzqEIyGPIfzuVXFn
+POSTGRES_PASSWORD=PhvT3cUIZLcveo0NZrcujg81pfIGR2YiauEQzwi6Hr0LOOgyQAUQXVK8eRslhT12
