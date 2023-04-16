@@ -20,7 +20,7 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - "8000:8000"
+      - '8000:8000'
     command: /start
 
   postgres:
@@ -48,7 +48,7 @@ services:
       - ./config:/app/config:z
       - ./cappuccino2:/app/cappuccino2:z
     ports:
-      - "9000:9000"
+      - '9000:9000'
     command: /start-docs
 
   redis:
@@ -80,5 +80,5 @@ services:
     image: cappuccino2_local_flower
     container_name: cappuccino2_local_flower
     ports:
-      - "5555:5555"
+      - '5555:5555'
     command: /start-flower
