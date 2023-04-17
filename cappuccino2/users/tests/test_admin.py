@@ -1,9 +1,6 @@
-import pytest
 from django.urls import reverse
 
 from cappuccino2.users.models import User
-
-pytestmark = pytest.mark.django_db
 
 
 class TestUserAdmin:
