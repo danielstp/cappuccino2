@@ -8,6 +8,6 @@ class UsersConfig(AppConfig):
 
     def ready(self):
         try:
-            import cappuccino2.users.signals  # noqa F401
+            import cappuccino2.users.signals  # noqa: F401
         except ImportError:
             pass

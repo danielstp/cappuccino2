@@ -1,13 +1,13 @@
 from django.db import models
 
 DÍA_SEMANA = (
-    ('LU', 'LU'),
-    ('MA', 'MA'),
-    ('MI', 'MI'),
-    ('JU', 'JU'),
-    ('VI', 'VI'),
-    ('SA', 'SA'),
-    ('DO', 'DO'),
+    ("LU", "LU"),
+    ("MA", "MA"),
+    ("MI", "MI"),
+    ("JU", "JU"),
+    ("VI", "VI"),
+    ("SA", "SA"),
+    ("DO", "DO"),
 )
 
 
@@ -15,33 +15,36 @@ class Carrera(models.Model):
     código = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
     pdf = models.URLField()
-    fecha = models.DateTimeField(default='2016-01-01 00:00:00-04')
-    fechaPDF = models.DateTimeField(default='2016-01-01 00:00:00-04')
+    fecha = models.DateTimeField(default="2016-01-01 00:00:00-04")
+    fechaPDF = models.DateTimeField(default="2016-01-01 00:00:00-04")
 
     def __str__(self):
         return self.nombre
+
     class Meta:
-        ordering = ('nombre',)
+        ordering = ("nombre",)
 
 
 class Actualización(models.Model):
     carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
-    fecha = models.DateTimeField(default='2016-01-01 00:00:00-04')
-    fechaPDF = models.DateTimeField(default='2016-01-01 00:00:00-04')
+    fecha = models.DateTimeField(default="2016-01-01 00:00:00-04")
+    fechaPDF = models.DateTimeField(default="2016-01-01 00:00:00-04")
 
     def __str__(self):
         return self.carrera.nombre + self.fecha
 
     class Meta:
-        ordering = ('fecha',)
+        ordering = ("fecha",)
+
 
 class Docente(models.Model):
     nombre = models.CharField(max_length=255)
 
     def __str__(self):
         return self.nombre
+
     class Meta:
-        ordering = ('nombre',)
+        ordering = ("nombre",)
 
 
 class Ayudante(models.Model):
@@ -49,8 +52,9 @@ class Ayudante(models.Model):
 
     def __str__(self):
         return self.nombre
+
     class Meta:
-        ordering = ('nombre',)
+        ordering = ("nombre",)
 
 
 class Materia(models.Model):
@@ -59,8 +63,9 @@ class Materia(models.Model):
 
     def __str__(self):
         return self.nombre
+
     class Meta:
-        ordering = ('nombre',)
+        ordering = ("nombre",)
 
 
 class NivelMateria(models.Model):
@@ -70,16 +75,21 @@ class NivelMateria(models.Model):
     nivel = models.CharField(max_length=1)
 
     class Meta:
-        ordering = ('carrera', 'nivel', 'materia',)
+        ordering = (
+            "carrera",
+            "nivel",
+            "materia",
+        )
+
 
 class Aula(models.Model):
     código = models.CharField(max_length=25, primary_key=True)
 
     def __str__(self):
         return self.código
-    class Meta:
-        ordering = ('código',)
 
+    class Meta:
+        ordering = ("código",)
 
 
 class Grupo(models.Model):
@@ -90,10 +100,10 @@ class Grupo(models.Model):
     ayudante = models.ForeignKey(Ayudante, null=True, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.materia.nombre + ' Grupo:' + self.código
-    class Meta:
-        ordering = ('grupo',)
+        return self.materia.nombre + " Grupo:" + self.código
 
+    class Meta:
+        ordering = ("grupo",)
 
 
 class Horario(models.Model):
@@ -105,8 +115,7 @@ class Horario(models.Model):
     grupo = models.ForeignKey(Grupo, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.grupo.materia.nombre + ' Grupo:' + self.código
+        return self.grupo.materia.nombre + " Grupo:" + self.código
+
     class Meta:
-        ordering = ('grupo',)
-
-
+        ordering = ("grupo",)
