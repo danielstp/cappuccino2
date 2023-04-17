@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from .models import Carrera
-from .models import Docente
-from .models import Ayudante
-from .models import Materia
-from .models import Aula
-from .models import Grupo
-from .models import Horario
+from .models import Aula, Ayudante, Carrera, Docente, Grupo, Horario, Materia
 
 admin.site.register(Carrera)
 admin.site.register(Docente)
