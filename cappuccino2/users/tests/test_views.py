@@ -4,18 +4,14 @@ from django.contrib import messages
 from django.contrib.auth.models import AnonymousUser
 from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
-from django.http import HttpRequest
+from django.http import HttpRequest, HttpResponseRedirect
 from django.test import RequestFactory
 from django.urls import reverse
 
-from cappuccino2.users.forms import UserChangeForm
+from cappuccino2.users.forms import UserAdminChangeForm
 from cappuccino2.users.models import User
 from cappuccino2.users.tests.factories import UserFactory
-from cappuccino2.users.views import (
-    UserRedirectView,
-    UserUpdateView,
-    user_detail_view,
-)
+from cappuccino2.users.views import UserRedirectView, UserUpdateView, user_detail_view
 
 pytestmark = pytest.mark.django_db
 
@@ -38,7 +34,6 @@ class TestUserUpdateView:
         request.user = user
 
         view.request = request
-
         assert view.get_success_url() == f"/users/{user.username}/"
 
     def test_get_object(self, user: User, rf: RequestFactory):
@@ -62,8 +57,9 @@ class TestUserUpdateView:
         view.request = request
 
         # Initialize the form
-        form = UserChangeForm()
-        form.cleaned_data = []
+        form = UserAdminChangeForm()
+        form.cleaned_data = {}
+        form.instance = user
         view.form_valid(form)
 
         messages_sent = [m.message for m in messages.get_messages(request)]
@@ -77,7 +73,6 @@ class TestUserRedirectView:
         request.user = user
 
         view.request = request
-
         assert view.get_redirect_url() == f"/users/{user.username}/"
 
 
@@ -85,7 +80,6 @@ class TestUserDetailView:
     def test_authenticated(self, user: User, rf: RequestFactory):
         request = rf.get("/fake-url/")
         request.user = UserFactory()
-
         response = user_detail_view(request, username=user.username)
 
         assert response.status_code == 200
@@ -93,9 +87,9 @@ class TestUserDetailView:
     def test_not_authenticated(self, user: User, rf: RequestFactory):
         request = rf.get("/fake-url/")
         request.user = AnonymousUser()
-
         response = user_detail_view(request, username=user.username)
         login_url = reverse(settings.LOGIN_URL)
 
+        assert isinstance(response, HttpResponseRedirect)
         assert response.status_code == 302
         assert response.url == f"{login_url}?next=/fake-url/"
