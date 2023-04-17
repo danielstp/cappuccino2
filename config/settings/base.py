@@ -78,6 +78,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "cappuccino2.users",
+    "cappuccino2.horario",
     # Your stuff: custom apps go here
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
