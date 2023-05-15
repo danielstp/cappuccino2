@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Django settings for Cappuccino2 project.
+Django settings for cappuccino2 project.
 
 For more information on this file, see
 https://docs.djangoproject.com/en/dev/topics/settings/
@@ -47,8 +47,6 @@ LOCAL_APPS = (
     # custom users app
     'cappuccino2.users.apps.UsersConfig',
     # Your stuff: custom apps go here
-    'cappuccino2.horario.apps.HorarioConfig',
-
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -92,7 +90,7 @@ EMAIL_BACKEND = env('DJANGO_EMAIL_BACKEND', default='django.core.mail.backends.s
 # ------------------------------------------------------------------------------
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
-    ("""Daniel Saguez Tezanos Pinto""", 'danielstp@gmail.com'),
+    ("""Daniel Saguez""", 'danielstp@gmail.com'),
 )
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#managers
@@ -116,7 +114,7 @@ DATABASES['default']['ATOMIC_REQUESTS'] = True
 TIME_ZONE = 'America/La_Paz'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = 'es-BO'
+LANGUAGE_CODE = 'en-us'
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
@@ -247,6 +245,17 @@ LOGIN_URL = 'account_login'
 
 # SLUGLIFIER
 AUTOSLUG_SLUGIFY_FUNCTION = 'slugify.slugify'
+
+########## CELERY
+INSTALLED_APPS += ('cappuccino2.taskapp.celery.CeleryConfig',)
+# if you are not using the django database broker (e.g. rabbitmq, redis, memcached), you can remove the next line.
+INSTALLED_APPS += ('kombu.transport.django',)
+BROKER_URL = env('CELERY_BROKER_URL', default='django://')
+if BROKER_URL == 'django://':
+    CELERY_RESULT_BACKEND = 'redis://'
+else:
+    CELERY_RESULT_BACKEND = BROKER_URL
+########## END CELERY
 # django-compressor
 # ------------------------------------------------------------------------------
 INSTALLED_APPS += ("compressor", )

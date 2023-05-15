@@ -1,7 +1,7 @@
-Cappuccino2
+cappuccino2
 ===========
 
-Sistema para la visualización decente de horarios para las carreras en la facultad de ciencias y tecnologia.
+Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
      :target: https://github.com/pydanny/cookiecutter-django/
@@ -57,15 +57,22 @@ Moved to `Live reloading and SASS compilation`_.
 
 
 
-
-
-Sentry
+Celery
 ^^^^^^
 
-Sentry is an error logging aggregator service. You can sign up for a free account at  https://sentry.io/signup/?code=cookiecutter  or download and host it yourself.
-The system is setup with reasonable defaults, including 404 logging and integration with the WSGI application.
+This app comes with Celery.
 
-You must set the DSN url in production.
+To run a celery worker:
+
+.. code-block:: bash
+
+    cd cappuccino2
+    celery -A cappuccino2.taskapp worker -l info
+
+Please note: For Celery's import magic to work, it is important *where* the celery commands are run. If you are in the same folder with *manage.py*, you should be right.
+
+
+
 
 
 Deployment
@@ -73,5 +80,21 @@ Deployment
 
 The following details how to deploy this application.
 
+
+Heroku
+^^^^^^
+
+See detailed `cookiecutter-django Heroku documentation`_.
+
+.. _`cookiecutter-django Heroku documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
+
+
+
+Docker
+^^^^^^
+
+See detailed `cookiecutter-django Docker documentation`_.
+
+.. _`cookiecutter-django Docker documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html
 
 
