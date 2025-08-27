@@ -1,4 +1,8 @@
+from datetime import datetime as dt
+
 from django.db import models
+from django.db.models.signals import pre_save
+from django.dispatch.dispatcher import receiver
 
 DÍA_SEMANA = (
     ("LU", "LU"),
@@ -15,8 +19,6 @@ class Carrera(models.Model):
     código = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
     pdf = models.URLField()
-    fecha = models.DateTimeField(default="2016-01-01 00:00:00-04")
-    fechaPDF = models.DateTimeField(default="2016-01-01 00:00:00-04")
 
     def __str__(self):
         return self.nombre
@@ -27,14 +29,21 @@ class Carrera(models.Model):
 
 class Actualización(models.Model):
     carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
-    fecha = models.DateTimeField(default="2016-01-01 00:00:00-04")
-    fechaPDF = models.DateTimeField(default="2016-01-01 00:00:00-04")
+    fecha = models.DateTimeField(auto_now_add=True)
+    fechaPDF = models.DateField(auto_now_add=True)
+    semestre = models.CharField(max_length=10, default="1")
 
     def __str__(self):
-        return self.carrera.nombre + self.fecha
+        return f"{self.carrera.nombre} - {self.fecha.year()} - semestre {self.semestre}"
 
     class Meta:
         ordering = ("fecha",)
+        verbose_name_plural = "Actualizaciones"
+
+
+@receiver(signal=pre_save, sender=Actualización)
+def actualización_pre_save(instance, **kwargs):
+    instance.id_timestamp = int(dt.now().timestamp())
 
 
 class Docente(models.Model):
@@ -74,6 +83,9 @@ class NivelMateria(models.Model):
     materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
     nivel = models.CharField(max_length=1)
 
+    def __str__(self):
+        return f"{self.nivel}-{self.materia}-{self.carrera}"
+
     class Meta:
         ordering = (
             "carrera",
@@ -98,6 +110,7 @@ class Grupo(models.Model):
     materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
     docente = models.ForeignKey(Docente, null=True, on_delete=models.PROTECT)
     ayudante = models.ForeignKey(Ayudante, null=True, on_delete=models.PROTECT)
+    actualización = models.ForeignKey(Actualización, on_delete=models.PROTECT)
 
     def __str__(self):
         return self.materia.nombre + " Grupo:" + self.código
