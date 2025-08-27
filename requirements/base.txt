@@ -26,3 +26,5 @@ drf-spectacular==0.26.2  # https://github.com/tfranzel/drf-spectacular
 
 # Horario
 pycurl==7.45.2
+parsel==1.8.1
+pdftotext==2.2.2
