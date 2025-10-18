@@ -3,13 +3,13 @@
 Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
-[![Black code style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/ambv/black)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 License: GPLv3
 
 ## Settings
 
-Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings.html).
+Moved to [settings](https://cookiecutter-django.readthedocs.io/en/latest/1-getting-started/settings.html).
 
 ## Basic Commands
 
@@ -19,7 +19,7 @@ Moved to [settings](http://cookiecutter-django.readthedocs.io/en/latest/settings
 
 - To create a **superuser account**, use this command:
 
-      $ python manage.py createsuperuser
+      uv run python manage.py createsuperuser
 
 For convenience, you can keep your normal user logged in on Chrome and your superuser logged in on Firefox (or similar), so that you can see how the site behaves for both kinds of users.
 
@@ -27,23 +27,23 @@ For convenience, you can keep your normal user logged in on Chrome and your supe
 
 Running type checks with mypy:
 
-    $ mypy cappuccino2
+    uv run mypy cappuccino2
 
 ### Test coverage
 
 To run the tests, check your test coverage, and generate an HTML coverage report:
 
-    $ coverage run -m pytest
-    $ coverage html
-    $ open htmlcov/index.html
+    uv run coverage run -m pytest
+    uv run coverage html
+    uv run open htmlcov/index.html
 
 #### Running tests with pytest
 
-    $ pytest
+    uv run pytest
 
 ### Live reloading and Sass CSS compilation
 
-Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/developing-locally.html#sass-compilation-live-reloading).
+Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
 
 ### Celery
 
@@ -53,7 +53,7 @@ To run a celery worker:
 
 ```bash
 cd cappuccino2
-celery -A config.celery_app worker -l info
+uv run celery -A config.celery_app worker -l info
 ```
 
 Please note: For Celery's import magic to work, it is important _where_ the celery commands are run. If you are in the same folder with _manage.py_, you should be right.
@@ -62,14 +62,14 @@ To run [periodic tasks](https://docs.celeryq.dev/en/stable/userguide/periodic-ta
 
 ```bash
 cd cappuccino2
-celery -A config.celery_app beat
+uv run celery -A config.celery_app beat
 ```
 
 or you can embed the beat service inside a worker with the `-B` option (not recommended for production use):
 
 ```bash
 cd cappuccino2
-celery -A config.celery_app worker -B -l info
+uv run celery -A config.celery_app worker -B -l info
 ```
 
 ## Deployment
@@ -78,8 +78,17 @@ The following details how to deploy this application.
 
 ### Heroku
 
-See detailed [cookiecutter-django Heroku documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html).
+See detailed [cookiecutter-django Heroku documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-on-heroku.html).
 
 ### Docker
 
-See detailed [cookiecutter-django Docker documentation](http://cookiecutter-django.readthedocs.io/en/latest/deployment-with-docker.html).
+See detailed [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-with-docker.html).
+
+### Custom Bootstrap Compilation
+
+The generated CSS is set up with automatic Bootstrap recompilation with variables of your choice.
+Bootstrap v5 is installed using npm and customised by tweaking your variables in `static/sass/custom_bootstrap_vars`.
+
+You can find a list of available variables [in the bootstrap source](https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss), or get explanations on them in the [Bootstrap docs](https://getbootstrap.com/docs/5.1/customize/sass/).
+
+Bootstrap's javascript as well as its dependencies are concatenated into a single file: `static/js/vendors.js`.

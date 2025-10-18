@@ -1,0 +1,17 @@
+services:
+  docs:
+    image: cappuccino2_local_docs
+    container_name: cappuccino2_local_docs
+    build:
+      context: .
+      dockerfile: ./compose/local/docs/Dockerfile
+    env_file:
+      - ./.envs/.local/.django
+    volumes:
+      - /app/.venv
+      - ./docs:/docs:z
+      - ./config:/app/config:z
+      - ./cappuccino2:/app/cappuccino2:z
+    ports:
+      - '9000:9000'
+    command: /start-docs

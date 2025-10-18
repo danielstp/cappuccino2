@@ -1,7 +1,8 @@
 import django.contrib.auth.models
 import django.contrib.auth.validators
-from django.db import migrations, models
 import django.utils.timezone
+from django.db import migrations
+from django.db import models
 
 import cappuccino2.users.models
 
@@ -31,7 +32,7 @@ class Migration(migrations.Migration):
                 (
                     "last_login",
                     models.DateTimeField(
-                        blank=True, null=True, verbose_name="last login"
+                        blank=True, null=True, verbose_name="last login",
                     ),
                 ),
                 (
@@ -41,25 +42,11 @@ class Migration(migrations.Migration):
                         help_text="Designates that this user has all permissions without explicitly assigning them.",
                         verbose_name="superuser status",
                     ),
-                ),(
-                    "username",
-                    models.CharField(
-                        error_messages={
-                            "unique": "A user with that username already exists."
-                        },
-                        help_text="Required. 150 characters or fewer. Letters, digits and @/./+/-/_ only.",
-                        max_length=150,
-                        unique=True,
-                        validators=[
-                            django.contrib.auth.validators.UnicodeUsernameValidator()
-                        ],
-                        verbose_name="username",
-                    ),
                 ),
                 (
                     "email",
                     models.EmailField(
-                        blank=True, max_length=254, verbose_name="email address"
+                        unique=True, max_length=254, verbose_name="email address",
                     ),
                 ),
                 (
@@ -81,13 +68,13 @@ class Migration(migrations.Migration):
                 (
                     "date_joined",
                     models.DateTimeField(
-                        default=django.utils.timezone.now, verbose_name="date joined"
+                        default=django.utils.timezone.now, verbose_name="date joined",
                     ),
                 ),
                 (
                     "name",
                     models.CharField(
-                        blank=True, max_length=255, verbose_name="Name of User"
+                        blank=True, max_length=255, verbose_name="Name of User",
                     ),
                 ),
                 (
@@ -119,7 +106,7 @@ class Migration(migrations.Migration):
                 "abstract": False,
             },
             managers=[
-                ("objects", django.contrib.auth.models.UserManager()),
+                ("objects", cappuccino2.users.models.UserManager()),
             ],
         ),
     ]

@@ -2,7 +2,8 @@
 With these settings, tests run faster.
 """
 
-from .base import *  # noqa
+from .base import *  # noqa: F403
+from .base import TEMPLATES
 from .base import env
 
 # GENERAL
@@ -10,7 +11,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="PiYiAf1yrc25wtf43FfZOQWfjFBUcRYqHwmRxFVdrxcg3lsn3cP9qokLq9RNBhZA",
+    default="dRbhEjR3QMixBloqJAB7SkIBAjz4wHEQPMeqt7uoqL5GfXfTQ8WKShOGNgy60eum",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
@@ -27,6 +28,14 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
 # DEBUGGING FOR TEMPLATES
 # ------------------------------------------------------------------------------
-TEMPLATES[0]["OPTIONS"]["debug"] = True  # type: ignore # noqa: F405
+TEMPLATES[0]["OPTIONS"]["debug"] = True  # type: ignore[index]
+
+# MEDIA
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#media-url
+MEDIA_URL = "http://media.testserver/"
+# django-webpack-loader
+# ------------------------------------------------------------------------------
+WEBPACK_LOADER["DEFAULT"]["LOADER_CLASS"] = "webpack_loader.loaders.FakeWebpackLoader"  # noqa: F405
 # Your stuff...
 # ------------------------------------------------------------------------------

@@ -11,7 +11,6 @@ Welcome to cappuccino2's documentation!
    :caption: Contents:
 
    howto
-   pycharm/configuration
    users
 
 
