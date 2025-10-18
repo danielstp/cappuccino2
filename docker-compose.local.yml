@@ -36,7 +36,7 @@ services:
       - ./.envs/.local/.postgres
 
   redis:
-    image: docker.io/redis:6
+    image: docker.io/redis:7.2
     container_name: cappuccino2_local_redis
     volumes:
       - cappuccino2_local_redis_data:/data
