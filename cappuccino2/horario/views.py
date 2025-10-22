@@ -2,30 +2,24 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView
 from rest_framework import viewsets
 
-from cappuccino2.horario.models import (
-    Actualización,
-    Aula,
-    Ayudante,
-    Carrera,
-    Docente,
-    Grupo,
-    Horario,
-    Materia,
-    NivelMateria,
-)
-from cappuccino2.horario.serializers import (
-    ActualizaciónSerializer,
-    AulaSerializer,
-    AyudanteSerializer,
-    CarreraSerializer,
-    DocenteSerializer,
-    GrupoSerializer,
-    HorarioSerializer,
-    MateriaSerializer,
-    NivelMateriaSerializer,
-)
-
-# from django.contrib.auth.models import Group
+from cappuccino2.horario.models import Actualización
+from cappuccino2.horario.models import Aula
+from cappuccino2.horario.models import Ayudante
+from cappuccino2.horario.models import Carrera
+from cappuccino2.horario.models import Docente
+from cappuccino2.horario.models import Grupo
+from cappuccino2.horario.models import Horario
+from cappuccino2.horario.models import Materia
+from cappuccino2.horario.models import NivelMateria
+from cappuccino2.horario.serializers import ActualizaciónSerializer
+from cappuccino2.horario.serializers import AulaSerializer
+from cappuccino2.horario.serializers import AyudanteSerializer
+from cappuccino2.horario.serializers import CarreraSerializer
+from cappuccino2.horario.serializers import DocenteSerializer
+from cappuccino2.horario.serializers import GrupoSerializer
+from cappuccino2.horario.serializers import HorarioSerializer
+from cappuccino2.horario.serializers import MateriaSerializer
+from cappuccino2.horario.serializers import NivelMateriaSerializer
 
 
 class CarreraViewSet(viewsets.ModelViewSet):
@@ -40,7 +34,7 @@ class CarreraViewSet(viewsets.ModelViewSet):
         "nombre",
         "pdf",
         "fecha",
-        "fechaPDF",
+        "fecha_pdf",
     )
 
 
@@ -133,4 +127,12 @@ class HorarioViewSet(viewsets.ModelViewSet):
 
     queryset = Horario.objects.all()
     serializer_class = HorarioSerializer
-    filter_fields = ("código", "día", "inicio", "fin", "aula", "grupo", "grupo__materia")
+    filter_fields = (
+        "código",
+        "día",
+        "inicio",
+        "fin",
+        "aula",
+        "grupo",
+        "grupo__materia",
+    )
