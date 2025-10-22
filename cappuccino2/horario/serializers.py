@@ -1,17 +1,14 @@
-# from django.contrib.auth.models import Group
 from rest_framework import serializers
 
-from cappuccino2.horario.models import (
-    Actualización,
-    Aula,
-    Ayudante,
-    Carrera,
-    Docente,
-    Grupo,
-    Horario,
-    Materia,
-    NivelMateria,
-)
+from cappuccino2.horario.models import Actualización
+from cappuccino2.horario.models import Aula
+from cappuccino2.horario.models import Ayudante
+from cappuccino2.horario.models import Carrera
+from cappuccino2.horario.models import Docente
+from cappuccino2.horario.models import Grupo
+from cappuccino2.horario.models import Horario
+from cappuccino2.horario.models import Materia
+from cappuccino2.horario.models import NivelMateria
 
 
 class CarreraSerializer(serializers.ModelSerializer):
@@ -27,7 +24,7 @@ class MateriaSerializer(serializers.ModelSerializer):
 
 
 class NivelMateriaSerializer(serializers.ModelSerializer):
-    materiaNombre = serializers.PrimaryKeyRelatedField(read_only=True)
+    materia_nombre = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = NivelMateria

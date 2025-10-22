@@ -35,7 +35,7 @@
     "webpack-merge": "^5.8.0"
   },
   "engines": {
-    "node": "16"
+    "node": "24.8"
   },
   "browserslist": [
     "last 2 versions"
@@ -44,7 +44,9 @@
     "presets": ["@babel/preset-env"]
   },
   "scripts": {
-    "dev": "",
-    "build": ""
+    "dev": "concurrently npm:dev:*",
+    "build": "webpack --config webpack/prod.config.js",
+    "dev:webpack": "webpack serve --config webpack/dev.config.js",
+    "dev:django": "uvicorn config.asgi:application --reload"
   }
 }
