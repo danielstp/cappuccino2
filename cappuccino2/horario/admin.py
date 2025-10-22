@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import Actualización, Aula, Ayudante, Carrera, Docente, Grupo, Horario, Materia, NivelMateria
+from .models import Actualización
+from .models import Aula
+from .models import Ayudante
+from .models import Carrera
+from .models import Docente
+from .models import Grupo
+from .models import Horario
+from .models import Materia
+from .models import NivelMateria
 
 admin.site.register(Actualización)
 admin.site.register(Carrera)

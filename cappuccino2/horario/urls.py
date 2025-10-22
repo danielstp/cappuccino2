@@ -1,16 +1,30 @@
-# -*- coding: utf-8 -*-
-from __future__ import absolute_import, unicode_literals
+from django.urls import include
+from django.urls import path
+from rest_framework.routers import DefaultRouter
 
-from .. import urls as urlsRoot
-from . import views
+from cappuccino2.horario.views import ActualizaciónViewSet
+from cappuccino2.horario.views import AulaViewSet
+from cappuccino2.horario.views import AyudanteViewSet
+from cappuccino2.horario.views import CarreraViewSet
+from cappuccino2.horario.views import DocenteViewSet
+from cappuccino2.horario.views import GrupoViewSet
+from cappuccino2.horario.views import HorarioViewSet
+from cappuccino2.horario.views import MateriaViewSet
+from cappuccino2.horario.views import NivelMateriaViewSet
 
-router = urlsRoot.router
-router.register(r"carreras", views.CarreraViewSet)
-router.register(r"materias", views.MateriaViewSet)
-router.register(r"nivel", views.NivelMateriaViewSet)
-router.register(r"actualización", views.ActualizaciónViewSet)
-router.register(r"docente", views.DocenteViewSet)
-router.register(r"ayudante", views.AyudanteViewSet)
-router.register(r"aula", views.AulaViewSet)
-router.register(r"grupo", views.GrupoViewSet)
-router.register(r"horario", views.HorarioViewSet)
+router = DefaultRouter()
+router.register(r"carreras", CarreraViewSet)
+router.register(r"materias", MateriaViewSet)
+router.register(r"niveles-materias", NivelMateriaViewSet)
+router.register(r"horarios", HorarioViewSet)
+router.register(r"actualizaciones", ActualizaciónViewSet)
+router.register(r"docentes", DocenteViewSet)
+router.register(r"ayudantes", AyudanteViewSet)
+router.register(r"aulas", AulaViewSet)
+router.register(r"grupos", GrupoViewSet)
+
+app_name = "horario"
+
+urlpatterns = [
+    path("", include(router.urls)),
+]

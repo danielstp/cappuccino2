@@ -22,11 +22,9 @@ urlpatterns = [
     path("users/", include("cappuccino2.users.urls", namespace="users")),
     path("accounts/", include("allauth.urls")),
     # Your stuff: custom urls includes go here
-    # ...
+    path("horario/", include("cappuccino2.horario.urls", namespace="horario")),
     # Media files
     *static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^horario/', include('cappuccino2.horario.urls', namespace='horario')),
 ]
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
