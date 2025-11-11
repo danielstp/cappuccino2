@@ -1,6 +1,8 @@
 from django.urls import path
 
-from cappuccino2.users.views import user_detail_view, user_redirect_view, user_update_view
+from cappuccino2.users.views import user_detail_view
+from cappuccino2.users.views import user_redirect_view
+from cappuccino2.users.views import user_update_view
 
 app_name = "users"
 urlpatterns = [

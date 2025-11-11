@@ -191,6 +191,7 @@ dependencies = [
     "pillow==12.0.0",
     "psycopg[c]==3.2.12",
     "pycurl>=7.45.7",
+    "pydotplus>=2.0.2",
     "python-slugify==8.0.4",
     "redis==7.0.1",
     "uvicorn-worker==0.4.0",
