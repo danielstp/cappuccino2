@@ -107,7 +107,10 @@ class Command(BaseCommand):
             nivel_materia = NivelMateria.objects.get(código=código_nivel_materia)
         except NivelMateria.DoesNotExist:
             nivel_materia = NivelMateria.objects.create(
-                código=código_nivel_materia, materia=mat, carrera=carrera, nivel=nivel,
+                código=código_nivel_materia,
+                materia=mat,
+                carrera=carrera,
+                nivel=nivel,
             )
             nivel_materia.save()
         try:
