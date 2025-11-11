@@ -3,8 +3,8 @@
 Cappuccino2 es una aplicación web basada en Django que automatiza la recopilación, el procesamiento y la distribución de los horarios de clases de la Facultad de Ciencias y Tecnología (FCYT) de la Universidad Mayor de San Simón (UMSS). El sistema extrae los datos de los horarios del sitio web de la FCYT, analiza los documentos PDF para convertirlos en datos estructurados y expone esta información a través de una API REST y una interfaz web.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
-[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/danielstp/Cappuccino2)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 
 License: GPLv3
 
