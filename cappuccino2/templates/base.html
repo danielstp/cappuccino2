@@ -87,7 +87,8 @@
                    href="{% url 'users:detail' request.user.pk %}">{% translate "My Profile" %}</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="{% url 'about' %}">About</a>
+                {# URL provided by django-allauth/account/urls.py #}
+                <a class="nav-link" href="{% url 'account_logout' %}">{% translate "Sign Out" %}</a>
               </li>
             {% else %}
               {% if ACCOUNT_ALLOW_REGISTRATION %}
