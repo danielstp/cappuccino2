@@ -1,14 +1,18 @@
-import datetime
 import fileinput
 import re
 import subprocess
 import urllib.request
+from datetime import datetime as dt
 from pathlib import Path
+from pyexpat.errors import messages
+from typing import final
+from typing import override
 
 import pycurl
 import requests
 from django.conf import settings
 from django.core.management.base import BaseCommand
+from django.core.management.base import CommandError
 from django.utils import timezone
 from parsel import Selector
 
@@ -22,91 +26,131 @@ from cappuccino2.horario.models import Materia
 from cappuccino2.horario.models import NivelMateria
 
 
+@final
 class Command(BaseCommand):
+    """Django management command to update schedules from FCYT - UMSS careers."""
+
     help = "Actualizar Horarios"
 
+    # Regular expressions for parsing data from text
     patron_código = re.compile(r"^(\d+)\s+(.*)$")
     patron_nivel = re.compile(r"^Plan:[\s\d\w\(\)]+Nivel de Estudios:\s*([A-J])$")
     patron_hora = re.compile(r"(\d{1,2})(\d{2})$")
     patron_fecha = "%H:%M %d-%m-%Y"
     patron_fecha_apache = "%a, %d %b %Y %H:%M:%S %Z"
 
+    @override
     def handle(self, *args, **options):
         self.descargar_horarios()
         self.generar_textos()
         self.procesar_horarios()
 
-    def descargar_horarios(self, *args, **options):
-        url = "http://fcyt.umss.edu.bo/horarios/"
-        text = requests.get(url, timeout=settings.TIMEOUT).text
-        selector = Selector(text=text)
-        carreras = selector.xpath(
-            "/html/body/table[4]//tr/td[3]/table//tr[2]/td/table//tr/td/table//tr/td[2]/div/font/text()",
-        ).extract()
-        fechas = selector.xpath(
-            "/html/body/table[4]//tr/td[3]/table//tr[2]/td/table//tr/td/table//tr/td[4]/div/font/text()",
-        ).extract()
-        horarios_pdf = selector.xpath(
-            "/html/body/table[4]//tr/td[3]/table//tr[2]/td/table//tr/td/table//tr/td[3]/div/font/a/@href",
-        ).extract()
-        código = {}
-        for i, carrera_str in enumerate(carreras):
-            tupla = self.patron_código.findall(carrera_str)
-            if tupla:
-                carrera_code = tupla[0][0]
-                código[carrera_code] = {}
-                código[carrera_code]["carrera"] = tupla[0][1]
-                if i < len(fechas):
-                    código[carrera_code]["fecha"] = fechas[i]
+    def crear_o_actualizar_carrera(
+        self,
+        código: int,
+        nombre: str,
+        fecha: dt,
+        url_pdf: str,
+    ) -> Carrera:
+        """
+        Creates or updates a career entry in the database.
+        """
+        try:
+            carrera, creado = Carrera.objects.get_or_create(
+                código=código, defaults={"nombre": nombre, "pdf": url_pdf}
+            )
+            self.stdout.write(
+                self.style.WARNING("La carrera ya existe en la base de datos"),
+            )
+        except Carrera.DoesNotExist:
+            self.stdout.write(self.style.WARNING(f"Creando Carrera {nombre}[{código}]"))
+            carrera = Carrera.objects.create(código=código, nombre=nombre, pdf=url_pdf)
 
-        patron_pdf = re.compile(r"(\d+)\.pdf$", re.MULTILINE)
-        for pdf in horarios_pdf:
-            código_carrera = patron_pdf.findall(pdf)
-            if len(código_carrera) > 0 and código_carrera[0] in código:
-                código[código_carrera[0]]["pdf"] = pdf
+        if carrera.fecha() < fecha:
+            self.stdout.write(self.style.WARNING("Hay Cambios"))
+            carrera.fecha = fecha
+            carrera.nombre = nombre
+            carrera.pdf = url_pdf
+            carrera.save()
+        else:
+            self.stdout.write(self.style.WARNING("Sin Cambios"))
 
-        for carrera_code, carrera_data in código.items():
+        try:
+            obj_carrera = Carrera.objects.get(pk=código)
+            if obj_carrera.fecha() < fecha:
+                self.stdout.write(self.style.WARNING("Hay Cambios"))
+                obj_carrera.fecha = fecha
+                obj_carrera.nombre = nombre
+                obj_carrera.pdf = url_pdf
+                obj_carrera.save()
+            else:
+                self.stdout.write(self.style.WARNING("Sin Cambios"))
+        except Carrera.DoesNotExist:
+            self.stdout.write(self.style.WARNING("Nueva"))
+            carrera = Carrera.objects.create(código=código)
+            carrera.set_fecha(fecha)
+            carrera.nombre = nombre
+            carrera.pdf = url_pdf
+            carrera.save()
+        return carrera
+
+    def descargar_horarios(self):
+        """
+        Descarga los horarios en PDF desde el sitio web FCYT UMSS.
+        """
+        url = "https://web.archive.org/web/20230705155551/http://fcyt.umss.edu.bo/horarios/"
+        try:
+            respuesta = requests.get(url, timeout=settings.TIMEOUT).text
+        except requests.exceptions.ReadTimeout as e:
+            self.stdout.write(self.style.ERROR("Timeout"))
+            self.stdout.write(self.style.ERROR(e.str()))
+            return
+        except requests.exceptions.ConnectionError as e:
+            self.stdout.write(
+                self.style.ERROR(
+                    f"Connection Error, the url is {url} is not reachable",
+                ),
+            )
+            message = "Connection Error - the url is not reachable"
+            for m in e.args[0]:
+                message = message + m
+            raise CommandError(message) from e
+        except pycurl.error as e:
+            self.stdout.write(self.style.ERROR("Error"))
+            self.stdout.write(self.style.ERROR(e.args[0]))
+            message = str(e.args[0])
+            raise CommandError(message) from e
+        carreras_html = Selector(text=respuesta)
+        carreras_xp = carreras_html.xpath(
+            "//table//tr/td[contains(@class, 'normal')]/table//tr",
+        ).pop()
+        xpath_común = "//tr[contains(@class, 'celdaColorResultado3') or contains(@class"
+        xpath_común += ", 'celdaColorResultado2')]"
+        carreras = carreras_xp.xpath(xpath_común + "/td[2]/div/font/text()").extract()
+        fechas = carreras_xp.xpath(xpath_común + "/td[4]/div/font/text()").extract()
+        pdf_urls = carreras_xp.xpath(xpath_común + "/td[3]/div/font/a/@href").extract()
+
+        for i in range(len(carreras)):
+            carrera = carreras[i].strip()
+            fecha = timezone.make_aware(
+                dt.strptime(fechas[i].strip(), self.patron_fecha),
+                timezone.get_current_timezone(),
+            )
+
+            pdf_url = pdf_urls[i].strip()
+            código, nombre = re.findall(r"^(\d+)\s(\w[\w ()]+)$", carrera).pop()
+
             self.stdout.write(
                 self.style.SUCCESS(
-                    f'Carrera:"{carrera_data["carrera"]}"',
+                    f"Carrera:{nombre} Código: {código} Fecha: {fecha} PDF: {pdf_url}",
                 ),
             )
 
-            try:
-                obj_carrera = Carrera.objects.get(pk=carrera_code)
-                self.stdout.write(self.style.WARNING("Existente"))
+            obj_carrera = self.crear_o_actualizar_carrera(
+                código, nombre, fecha, pdf_url
+            )
 
-                fecha = timezone.make_aware(
-                    datetime.datetime.strptime(
-                        carrera_data["fecha"],
-                        self.patron_fecha,
-                    ),
-                )
-
-                if obj_carrera.fecha() < fecha:
-                    self.stdout.write(self.style.WARNING("Hay Cambios"))
-                    obj_carrera.fecha = fecha
-                    obj_carrera.nombre = carrera_data["carrera"]
-                    if "pdf" in carrera_data:
-                        obj_carrera.pdf = carrera_data["pdf"]
-                    obj_carrera.save()
-                else:
-                    self.stdout.write(self.style.WARNING("Sin Cambios"))
-            except Carrera.DoesNotExist:
-                self.stdout.write(self.style.WARNING("Nueva"))
-                obj_carrera = Carrera.objects.create(código=carrera_code)
-                fecha = timezone.make_aware(
-                    datetime.datetime.strptime(
-                        carrera_data["fecha"],
-                        self.patron_fecha,
-                    ),
-                )
-                obj_carrera.fecha = fecha
-                obj_carrera.nombre = carrera_data["carrera"]
-                if "pdf" in carrera_data:
-                    obj_carrera.pdf = carrera_data["pdf"]
-                obj_carrera.save()
-            self.descargar(carrera_code, obj_carrera.código)
+            self.descargar(código, obj_carrera)
         self.stdout.write(self.style.SUCCESS("Terminado"))
 
     def descargar(self, código, carrera):
@@ -150,7 +194,7 @@ class Command(BaseCommand):
     def progress(self, download_t, download_d, upload_t, upload_d):
         if download_t != 0:
             self.stdout.write(
-                self.style.SUCCESS(int(download_d * 100 / download_t), ending="\r")
+                self.style.SUCCESS(int(download_d * 100 / download_t), ending="\r"),
             )
 
     def generar_textos(self):
