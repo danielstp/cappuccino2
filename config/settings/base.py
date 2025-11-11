@@ -296,4 +296,4 @@ STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-TIMEOUT = 5
+TIMEOUT = 15
