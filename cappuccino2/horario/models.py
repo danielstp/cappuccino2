@@ -40,7 +40,6 @@ class Carrera(models.Model):
 
     código = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
-    pdf = models.URLField()
 
     def fecha(self) -> dt:
         try:
@@ -76,7 +75,9 @@ class Actualización(models.Model):
     carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
     fecha = models.DateTimeField(auto_now_add=True)
     fecha_pdf = models.DateField(auto_now_add=True)
-    semestre = models.CharField(max_length=10, default="1")
+    url_pdf = models.URLField(max_length=255, default="")
+    semestre = models.CharField(max_length=1, default="1")
+    año = models.IntegerField(default=2020)
 
     class Meta:
         ordering = ("fecha",)
@@ -88,7 +89,7 @@ class Actualización(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.carrera.nombre} - {self.fecha.year()} - semestre {self.semestre}"
+        return f"{self.carrera.nombre} - {self.año} - semestre {self.semestre} - {self.fecha}"
 
     @classmethod
     def get_default_actualizacion(cls):
