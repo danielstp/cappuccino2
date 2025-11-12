@@ -1,4 +1,4 @@
-FROM docker.io/node:24.11-bookworm-slim AS client-builder
+FROM docker.io/node:24.11.1-bookworm-slim AS client-builder
 
 ARG APP_HOME=/app
 WORKDIR ${APP_HOME}
