@@ -11,7 +11,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="G0Apsgxbi66oOSDT9uVtbYTPvtKA7HRpVRBSvRaWhTLxlkM3saSd1QvQgqPbttlb",
+    default="k6Cw3qYP32PBqg8vdb75sBYddBBsPrFsh7HYuSPYEPDGezBbXuidsRqIlChT0Sto",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
@@ -34,8 +34,5 @@ TEMPLATES[0]["OPTIONS"]["debug"] = True  # type: ignore[index]
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "http://media.testserver/"
-# django-webpack-loader
-# ------------------------------------------------------------------------------
-WEBPACK_LOADER["DEFAULT"]["LOADER_CLASS"] = "webpack_loader.loaders.FakeWebpackLoader"  # noqa: F405
 # Your stuff...
 # ------------------------------------------------------------------------------

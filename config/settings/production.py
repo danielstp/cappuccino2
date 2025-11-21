@@ -11,7 +11,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["cappuccino2.scesi.org"])
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=["capuchino-scesi.web.app"])
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -109,14 +109,14 @@ MEDIA_URL = f"https://{aws_s3_domain}/media/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#default-from-email
 DEFAULT_FROM_EMAIL = env(
     "DJANGO_DEFAULT_FROM_EMAIL",
-    default="cappuccino2 <noreply@cappuccino2.scesi.org>",
+    default="Cappuccino2 <noreply@capuchino-scesi.web.app>",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#server-email
 SERVER_EMAIL = env("DJANGO_SERVER_EMAIL", default=DEFAULT_FROM_EMAIL)
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
 EMAIL_SUBJECT_PREFIX = env(
     "DJANGO_EMAIL_SUBJECT_PREFIX",
-    default="[cappuccino2] ",
+    default="[Cappuccino2] ",
 )
 ACCOUNT_EMAIL_SUBJECT_PREFIX = EMAIL_SUBJECT_PREFIX
 
@@ -139,6 +139,22 @@ ANYMAIL = {
     "MAILGUN_API_URL": env("MAILGUN_API_URL", default="https://api.mailgun.net/v3"),
 }
 
+# django-compressor
+# ------------------------------------------------------------------------------
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_ENABLED
+COMPRESS_ENABLED = env.bool("COMPRESS_ENABLED", default=True)
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_URL
+COMPRESS_URL = STATIC_URL  # noqa: F405
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_OFFLINE
+COMPRESS_OFFLINE = True  # Offline compression is required when using Whitenoise
+# https://django-compressor.readthedocs.io/en/latest/settings/#django.conf.settings.COMPRESS_FILTERS
+COMPRESS_FILTERS = {
+    "css": [
+        "compressor.filters.css_default.CssAbsoluteFilter",
+        "compressor.filters.cssmin.rCSSMinFilter",
+    ],
+    "js": ["compressor.filters.jsmin.JSMinFilter"],
+}
 
 # LOGGING
 # ------------------------------------------------------------------------------
@@ -188,7 +204,7 @@ LOGGING = {
 # -------------------------------------------------------------------------------
 # Tools that generate code samples can use SERVERS to point to the correct domain
 SPECTACULAR_SETTINGS["SERVERS"] = [
-    {"url": "https://cappuccino2.scesi.org", "description": "Production server"},
+    {"url": "https://capuchino-scesi.web.app", "description": "Production server"},
 ]
 # Your stuff...
 # ------------------------------------------------------------------------------

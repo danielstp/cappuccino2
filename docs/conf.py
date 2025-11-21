@@ -21,16 +21,16 @@ if os.getenv("READTHEDOCS", default="False") == "True":
     os.environ["DJANGO_READ_DOT_ENV_FILE"] = "True"
     os.environ["USE_DOCKER"] = "no"
 else:
-    sys.path.insert(0, os.path.abspath("/app"))
+    sys.path.insert(0, os.path.abspath(".."))
 os.environ["DATABASE_URL"] = "sqlite:///readthedocs.db"
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 django.setup()
 
 # -- Project information -----------------------------------------------------
 
-project = "cappuccino2"
-copyright = """2025, Daniel Saguez"""  # noqa: A001
-author = "Daniel Saguez"
+project = "Cappuccino2"
+copyright = """2025, Daniel Saguez Tezanos Pinto"""  # noqa: A001
+author = "Daniel Saguez Tezanos Pinto"
 
 
 # -- General configuration ---------------------------------------------------

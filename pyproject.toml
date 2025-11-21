@@ -142,11 +142,11 @@ dev = [
     "ipdb==0.13.13",
     "mypy==1.18.2",
     "pre-commit==4.3.0",
-    "psycopg[c]==3.2.12",
+    "psycopg[binary]==3.2.12",
     "pytest==8.4.2",
     "pytest-django==4.11.1",
     "pytest-sugar==1.1.1",
-    "ruff==0.14.4",
+    "ruff==0.14.5",
     "sphinx==8.2.3",
     "sphinx-autobuild==2025.8.25",
     "watchfiles==1.1.1",
@@ -156,37 +156,35 @@ dev = [
 [project]
 name = "cappuccino2"
 version = "2.0.0"
-description = "Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón"
+description = "Cappuccino2 es una aplicación web basada en Django que automatiza la recopilación, el procesamiento y la distribución de los horarios de clases de la Facultad de Ciencias y Tecnología (FCYT) de la Universidad Mayor de San Simón (UMSS). El sistema extrae los datos de los horarios del sitio web de la FCYT, analiza los documentos PDF para convertirlos en datos estructurados y expone esta información a través de una API REST y una interfaz web."
 readme = "README.md"
 
 license = { text = "GPLv3" }
 authors = [
-  { name = "Daniel Saguez", email = "danielstp@gmail.com" },
+  { name = "Daniel Saguez Tezanos Pinto", email = "danielstp@gmail.com" },
 ]
 requires-python = "==3.13.*"
 dependencies = [
     "argon2-cffi==25.1.0",
-    "celery==5.5.3",
     "crispy-bootstrap5==2025.6",
     "django==5.2.8",
     "django-allauth[mfa]==65.13.0",
     "django-anymail[mailgun]==13.1",
-    "django-celery-beat==2.8.1",
+    "django-compressor==4.5.1",
     "django-cors-headers==4.9.0",
     "django-crispy-forms==2.5",
     "django-environ==0.12.0",
     "django-model-utils==5.0.0",
     "django-redis==6.0.0",
     "django-storages[s3]==1.14.6",
-    "django-webpack-loader==3.2.2",
     "djangorestframework==3.16.1",
     "drf-spectacular==0.29.0",
-    "flower==2.0.1",
     "gunicorn==23.0.0",
     "hiredis==3.3.0",
     "pillow==12.0.0",
     "psycopg[c]==3.2.12",
     "python-slugify==8.0.4",
+    "rcssmin==1.1.2",
     "redis==7.0.1",
     "uvicorn-worker==0.4.0",
     "uvicorn[standard]==0.38.0",

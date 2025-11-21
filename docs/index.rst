@@ -1,9 +1,9 @@
-.. cappuccino2 documentation master file, created by
+.. Cappuccino2 documentation master file, created by
    sphinx-quickstart.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to cappuccino2's documentation!
+Welcome to Cappuccino2's documentation!
 ======================================================================
 
 .. toctree::
@@ -11,6 +11,7 @@ Welcome to cappuccino2's documentation!
    :caption: Contents:
 
    howto
+   pycharm/configuration
    users
 
 

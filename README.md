@@ -1,6 +1,6 @@
-# cappuccino2
+# Cappuccino2
 
-Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón
+Cappuccino2 es una aplicación web basada en Django que automatiza la recopilación, el procesamiento y la distribución de los horarios de clases de la Facultad de Ciencias y Tecnología (FCYT) de la Universidad Mayor de San Simón (UMSS). El sistema extrae los datos de los horarios del sitio web de la FCYT, analiza los documentos PDF para convertirlos en datos estructurados y expone esta información a través de una API REST y una interfaz web.
 
 [![Built with Cookiecutter Django](https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg?logo=cookiecutter)](https://github.com/cookiecutter/cookiecutter-django/)
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
@@ -45,50 +45,6 @@ To run the tests, check your test coverage, and generate an HTML coverage report
 
 Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
 
-### Celery
-
-This app comes with Celery.
-
-To run a celery worker:
-
-```bash
-cd cappuccino2
-uv run celery -A config.celery_app worker -l info
-```
-
-Please note: For Celery's import magic to work, it is important _where_ the celery commands are run. If you are in the same folder with _manage.py_, you should be right.
-
-To run [periodic tasks](https://docs.celeryq.dev/en/stable/userguide/periodic-tasks.html), you'll need to start the celery beat scheduler service. You can start it as a standalone process:
-
-```bash
-cd cappuccino2
-uv run celery -A config.celery_app beat
-```
-
-or you can embed the beat service inside a worker with the `-B` option (not recommended for production use):
-
-```bash
-cd cappuccino2
-uv run celery -A config.celery_app worker -B -l info
-```
-
 ## Deployment
 
 The following details how to deploy this application.
-
-### Heroku
-
-See detailed [cookiecutter-django Heroku documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-on-heroku.html).
-
-### Docker
-
-See detailed [cookiecutter-django Docker documentation](https://cookiecutter-django.readthedocs.io/en/latest/3-deployment/deployment-with-docker.html).
-
-### Custom Bootstrap Compilation
-
-The generated CSS is set up with automatic Bootstrap recompilation with variables of your choice.
-Bootstrap v5 is installed using npm and customised by tweaking your variables in `static/sass/custom_bootstrap_vars`.
-
-You can find a list of available variables [in the bootstrap source](https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss), or get explanations on them in the [Bootstrap docs](https://getbootstrap.com/docs/5.1/customize/sass/).
-
-Bootstrap's javascript as well as its dependencies are concatenated into a single file: `static/js/vendors.js`.

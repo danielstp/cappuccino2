@@ -1,8 +1,5 @@
 
-{% load static i18n %}
-    {% load render_bundle from webpack_loader %}
-
-  <!DOCTYPE html>
+{% load static i18n compress%}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}
 <html lang="{{ LANGUAGE_CODE }}">
   <head>
@@ -10,21 +7,29 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <title>
       {% block title %}
-      cappuccino2
+      Cappuccino2
     {% endblock title %}
   </title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description"
-        content="Ayuda a la generación de Horarios para la Facultad de Ciencias y Tecnología de la Universidad Mayor de San Simón" />
+        content="Cappuccino2 es una aplicación web basada en Django que automatiza la recopilación, el procesamiento y la distribución de los horarios de clases de la Facultad de Ciencias y Tecnología (FCYT) de la Universidad Mayor de San Simón (UMSS). El sistema extrae los datos de los horarios del sitio web de la FCYT, analiza los documentos PDF para convertirlos en datos estructurados y expone esta información a través de una API REST y una interfaz web." />
   <meta name="author"
-        content="Daniel Saguez" />
+        content="Daniel Saguez Tezanos Pinto" />
   <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
   {% block css %}
+    <!-- Latest compiled and minified Bootstrap CSS -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/css/bootstrap.min.css"
+          integrity="sha512-SbiR/eusphKoMVVXysTKG/7VseWii+Y3FdHrt0EpKgpToZeemhqHeZeLWLhJutz/2ut2Vw1uQEj2MbRF+TVBUA=="
+          crossorigin="anonymous"
+          referrerpolicy="no-referrer" />
 <!-- Your stuff: Third-party CSS libraries go here -->
 <!-- This file stores project-specific CSS -->
 
 
-{% render_bundle 'project' 'css' %}
+{% compress css %}
+  <link href="{% static 'css/project.css' %}" rel="stylesheet" />
+{% endcompress %}
 
 
 {% endblock css %}
@@ -34,14 +39,21 @@
 {% block javascript %}
 
 
-<!-- Vendor dependencies bundled as one file -->
-{% render_bundle 'vendors' 'js' attrs='defer' %}
+<!-- Bootstrap JS -->
+<script defer
+        src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.3/js/bootstrap.min.js"
+        integrity="sha512-1/RvZTcCDEUjY/CypiMz+iqqtaoQfAITmNSJY17Myp4Ms5mdxPS5UV7iOfdZoxcGhzFbOm6sntTKJppjvuhg4g=="
+        crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
+<!-- Your stuff: Third-party javascript libraries go here -->
 
 
 <!-- place project specific Javascript in this file -->
 
 
-{% render_bundle 'project' 'js' attrs='defer' %}
+{% compress js %}
+  <script defer src="{% static 'js/project.js' %}"></script>
+{% endcompress %}
 
 
 {% endblock javascript %}
@@ -60,7 +72,7 @@
                 aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'home' %}">cappuccino2</a>
+        <a class="navbar-brand" href="{% url 'home' %}">Cappuccino2</a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item active">

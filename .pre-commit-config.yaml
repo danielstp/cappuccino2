@@ -21,13 +21,6 @@ repos:
       - id: check-docstring-first
       - id: detect-private-key
 
-  - repo: https://github.com/pre-commit/mirrors-prettier
-    rev: v4.0.0-alpha.8
-    hooks:
-      - id: prettier
-        args: ['--tab-width', '2', '--single-quote']
-        exclude: 'cappuccino2/templates/'
-
   - repo: https://github.com/adamchainz/django-upgrade
     rev: '1.29.1'
     hooks:
@@ -36,7 +29,7 @@ repos:
 
   # Run the Ruff linter.
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.4
+    rev: v0.14.5
     hooks:
       # Linter
       - id: ruff-check

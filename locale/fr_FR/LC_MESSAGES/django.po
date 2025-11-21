@@ -1,6 +1,6 @@
-# Translations for the cappuccino2 project
-# Copyright (C) 2025 Daniel Saguez
-# Daniel Saguez <danielstp@gmail.com>, 2025.
+# Translations for the Cappuccino2 project
+# Copyright (C) 2025 Daniel Saguez Tezanos Pinto
+# Daniel Saguez Tezanos Pinto <danielstp@gmail.com>, 2025.
 #
 #, fuzzy
 msgid ""

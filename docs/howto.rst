@@ -7,10 +7,11 @@ Get Started
 Documentation can be written as rst files in `cappuccino2/docs`.
 
 
-To build and serve docs, use the commands::
+To build and serve docs, use the command::
 
-    docker compose -f docker-compose.docs.yml up
+    uv run make livehtml
 
+from inside the `cappuccino2/docs` directory.
 
 
 Changes to files in `docs/_source` will be picked up and reloaded automatically.
@@ -31,8 +32,3 @@ To compile all docstrings automatically into documentation source files, use the
 
         uv run make apidocs
 
-
-This can be done in the docker container:
-    ::
-
-        docker run --rm docs make apidocs

@@ -1,7 +1,6 @@
 from .base import *  # noqa: F403
 from .base import INSTALLED_APPS
 from .base import MIDDLEWARE
-from .base import WEBPACK_LOADER
 from .base import env
 
 # GENERAL
@@ -11,7 +10,7 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="d3bfltqa8Z2VrOA2QQG8kixSJV54WJPqT5LSNz0A7XJLT9EMfNEbg6zZL1QQd2Pt",
+    default="ueLlM934ctdsSXGO8i1prSDuUxgpU0BNeZCZMev7gKdTh6Zf6U4MhzoZfwWdPpO0",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
@@ -57,29 +56,12 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-if env("USE_DOCKER") == "yes":
-    import socket
 
-    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [".".join([*ip.split(".")[:-1], "1"]) for ip in ips]
-    try:
-        _, _, ips = socket.gethostbyname_ex("node")
-        INTERNAL_IPS.extend(ips)
-    except socket.gaierror:
-        # The node container isn't started (yet?)
-        pass
 
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
 INSTALLED_APPS += ["django_extensions"]
-# Celery
-# ------------------------------------------------------------------------------
 
-# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-eager-propagates
-CELERY_TASK_EAGER_PROPAGATES = True
-# django-webpack-loader
-# ------------------------------------------------------------------------------
-WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG
 # Your stuff...
 # ------------------------------------------------------------------------------

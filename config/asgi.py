@@ -1,5 +1,5 @@
 """
-ASGI config for cappuccino2 project.
+ASGI config for Cappuccino2 project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
