@@ -5,17 +5,74 @@ from .models import Aula
 from .models import Ayudante
 from .models import Carrera
 from .models import Docente
+from .models import Gestión
 from .models import Grupo
 from .models import Horario
 from .models import Materia
 from .models import NivelMateria
 
+
+class GrupoAdmin(admin.ModelAdmin):
+    list_display = ("código", "grupo", "materia", "actualización")
+    list_filter = ("materia", "actualización")
+    search_fields = ("código", "materia__nombre", "actualización__fecha")
+
+
+class MateriaAdmin(admin.ModelAdmin):
+    list_display = (
+        "código",
+        "nombre",
+    )
+    list_filter = ("código",)
+    search_fields = (
+        "código",
+        "nombre",
+    )
+
+
+class NivelMateriaAdmin(admin.ModelAdmin):
+    list_display = ("código", "nivel", "materia", "carrera")
+    list_filter = ("nivel", "carrera", "materia")
+    search_fields = ("código", "nivel", "carrera__nombre", "materia__nombre")
+
+
+class CarreraAdmin(admin.ModelAdmin):
+    list_display = ("código", "nombre")
+    list_filter = ("nombre",)
+    search_fields = ("código", "nombre")
+
+
+class DocenteAdmin(admin.ModelAdmin):
+    list_display = ("nombre",)
+    list_filter = ("nombre",)
+    search_fields = ("nombre",)
+
+
+class AyudanteAdmin(admin.ModelAdmin):
+    list_display = ("nombre",)
+    list_filter = ("nombre",)
+    search_fields = ("nombre",)
+
+
+class AulaAdmin(admin.ModelAdmin):
+    list_display = ("código",)
+    list_filter = ("código",)
+    search_fields = ("código",)
+
+
+class HorarioAdmin(admin.ModelAdmin):
+    list_display = ("código", "nombre")
+    list_filter = ("carrera",)
+    search_fields = ("código", "nombre", "carrera__nombre")
+
+
 admin.site.register(Actualización)
-admin.site.register(Carrera)
-admin.site.register(Docente)
-admin.site.register(Ayudante)
-admin.site.register(Materia)
-admin.site.register(NivelMateria)
-admin.site.register(Aula)
-admin.site.register(Grupo)
+admin.site.register(Gestión)
+admin.site.register(Carrera, CarreraAdmin)
+admin.site.register(Docente, DocenteAdmin)
+admin.site.register(Ayudante, AyudanteAdmin)
+admin.site.register(Materia, MateriaAdmin)
+admin.site.register(NivelMateria, NivelMateriaAdmin)
+admin.site.register(Aula, AulaAdmin)
+admin.site.register(Grupo, GrupoAdmin)
 admin.site.register(Horario)
