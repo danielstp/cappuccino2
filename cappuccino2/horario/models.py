@@ -2,11 +2,7 @@ from datetime import datetime as dt
 from datetime import timedelta
 
 from django.db import models
-from django.db.models.signals import pre_save
-from django.dispatch.dispatcher import receiver
 from django.utils.timezone import get_default_timezone
-from django.utils.timezone import make_aware
-from django.utils.timezone import now
 
 LUNES = dt(2024, 12, 23, 0, 0, 0, tzinfo=get_default_timezone())
 
@@ -41,28 +37,6 @@ class Carrera(models.Model):
     código = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
 
-    def fecha(self) -> dt:
-        try:
-            return Actualización.objects.filter(carrera=self).latest("fecha").fecha
-        except Actualización.DoesNotExist:
-            return make_aware(dt(2020, 1, 1, tzinfo=get_default_timezone()))
-
-    def set_fecha(self, fecha: dt, fecha_pdf: dt, semestre: str):
-        Actualización.objects.create(
-            carrera=self,
-            fecha=fecha,
-            semestre=semestre,
-            fecha_pdf=fecha_pdf,
-        )
-
-    def fecha_pdf(self) -> dt:
-        try:
-            return (
-                Actualización.objects.filter(carrera=self).latest("fecha_pdf").fecha_pdf
-            )
-        except Actualización.DoesNotExist:
-            return make_aware(dt(2020, 1, 1, tzinfo=get_default_timezone()))
-
     class Meta:
         ordering = ("nombre",)
         indexes = [models.Index(fields=["nombre"])]
@@ -71,34 +45,68 @@ class Carrera(models.Model):
         return self.nombre
 
 
-class Actualización(models.Model):
-    carrera = models.ForeignKey(Carrera, on_delete=models.PROTECT)
-    fecha = models.DateTimeField(auto_now_add=True)
-    fecha_pdf = models.DateField(auto_now_add=True)
-    url_pdf = models.URLField(max_length=255, default="")
-    semestre = models.CharField(max_length=1, default="1")
-    año = models.IntegerField(default=2020)
+class Gestión(models.Model):
+    id = models.CharField(max_length=20, primary_key=True, editable=False)
+    año = models.IntegerField()
+    semestre = models.CharField(max_length=1)
+    inicio = models.DateField()
+    fin = models.DateField()
 
     class Meta:
+        ordering = ("año", "semestre")
+        indexes = [
+            models.Index(fields=["año"]),
+            models.Index(fields=["semestre"]),
+        ]
+        unique_together = ("año", "semestre")
+        verbose_name_plural = "Gestiones"
+
+    def __str__(self):
+        return f"{self.año}.{self.semestre}"
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = f"{self.año}.{self.semestre}"
+        super().save(*args, **kwargs)
+
+
+class Actualización(models.Model):
+    id = models.CharField(max_length=20, primary_key=True, editable=False)
+    fecha = models.DateTimeField()
+    fecha_pdf = models.DateField(null=True)
+    url_pdf = models.URLField(max_length=255, default="")
+    gestión = models.ForeignKey(Gestión, on_delete=models.PROTECT)
+    carreras = models.ManyToManyField(Carrera)
+
+    class Meta:
+        unique_together = ("gestión", "fecha")
         ordering = ("fecha",)
         verbose_name_plural = "Actualizaciones"
         indexes = [
             models.Index(fields=["fecha"]),
             models.Index(fields=["fecha_pdf"]),
-            models.Index(fields=["semestre"]),
+            models.Index(fields=["gestión"]),
+            models.Index(fields=["gestión", "fecha"]),
         ]
 
     def __str__(self):
-        return f"{self.carrera.nombre} - {self.año} - semestre {self.semestre} - {self.fecha}"
+        return self.genera_id()
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = self.genera_id()
+        super().save(*args, **kwargs)
+
+    def genera_id(self):
+        return Actualización.genera_pk(self.gestión, self.fecha)
+
+    @classmethod
+    def genera_pk(cls, gestion: Gestión, fecha: dt):
+        return f"{gestion}.{fecha.strftime('%m.%d.%H%M%Z')}"
 
     @classmethod
     def get_default_actualizacion(cls):
-        return cls.objects.latest("fecha").id
-
-
-@receiver(signal=pre_save, sender=Actualización)
-def actualización_pre_save(instance, **kwargs):
-    instance.id_timestamp = int(now().timestamp())
+        return cls.objects.latest("fecha").pk
 
 
 class Docente(models.Model):
@@ -156,7 +164,23 @@ class NivelMateria(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.nivel}-{self.materia}-{self.carrera}"
+        return self.genera_id()
+
+    def save(self, *args, **kwargs):
+        if not self.código:
+            self.código = self.genera_id()
+        super().save(*args, **kwargs)
+
+    def genera_id(self):
+        return NivelMateria.genera_pk(
+            self.nivel,
+            self.materia.código,
+            self.carrera.código,
+        )
+
+    @classmethod
+    def genera_pk(cls, nivel: str, materia: int, carrera: int):
+        return f"{nivel}-{materia}-{carrera}"
 
 
 class Aula(models.Model):
@@ -171,11 +195,15 @@ class Aula(models.Model):
 
 
 class Grupo(models.Model):
-    código = models.CharField(max_length=25, primary_key=True)
+    código = models.CharField(max_length=32, primary_key=True, editable=False)
     grupo = models.CharField(max_length=2)
     materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
-    docente = models.ForeignKey(Docente, null=True, on_delete=models.PROTECT)
-    ayudante = models.ForeignKey(Ayudante, null=True, on_delete=models.PROTECT)
+    docente = models.ForeignKey(
+        Docente, blank=True, null=True, default=None, on_delete=models.PROTECT,
+    )
+    ayudante = models.ForeignKey(
+        Ayudante, blank=True, null=True, default=None, on_delete=models.PROTECT,
+    )
     actualización = models.ForeignKey(Actualización, on_delete=models.PROTECT)
 
     class Meta:
@@ -190,7 +218,28 @@ class Grupo(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.materia.nombre} Grupo:{self.código}"
+        return f"{self.código}"
+
+    def save(self, *args, **kwargs):
+        if not self.código:
+            print("Generando código")
+            print(f"Grupo: {self.grupo}")
+            print(f"Materia: {self.materia}")
+            print(f"Actualización: {self.actualización}")
+            print(f"Generando ID: {self.genera_id()}")
+            self.código = self.genera_id()
+        super().save(*args, **kwargs)
+
+    def genera_id(self):
+        return Grupo.genera_pk(
+            self.grupo,
+            self.materia,
+            self.actualización,
+        )
+
+    @classmethod
+    def genera_pk(cls, grupo: str, materia: Materia, actualización: Actualización):
+        return f"{grupo}-{materia.código}-{actualización}"
 
 
 class Horario(models.Model):
@@ -213,4 +262,12 @@ class Horario(models.Model):
         ]
 
     def __str__(self):
-        return self.grupo.materia.nombre + " Grupo:" + self.código
+        return self.genera_id()
+
+    def save(self, *args, **kwargs):
+        if not self.código:
+            self.código = self.genera_id()
+        super().save(*args, **kwargs)
+
+    def genera_id(self):
+        return f"{self.día}-{self.grupo.materia.nombre}-{self.grupo.grupo}"
