@@ -4,6 +4,7 @@
 from pathlib import Path
 
 import environ
+from django.utils.translation import gettext_lazy as _
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 # cappuccino2/
@@ -28,11 +29,12 @@ TIME_ZONE = "America/La_Paz"
 LANGUAGE_CODE = "es-bo"
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 # from django.utils.translation import gettext_lazy as _
-# LANGUAGES = [
-#     ('en', _('English')),
+LANGUAGES = [
+    ('es-bo', _('Spanish')),
+    ('en', _('English')),
 #     ('fr-fr', _('French')),
 #     ('pt-br', _('Portuguese')),
-# ]
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -73,6 +75,7 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.humanize",  # Handy template tags
+    "grappelli",
     "django.contrib.admin",
     "django.forms",
 ]
@@ -196,6 +199,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
+                "django.template.context_processors.request",
                 "cappuccino2.users.context_processors.allauth_settings",
             ],
         },
