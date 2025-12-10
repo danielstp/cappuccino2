@@ -110,11 +110,11 @@ select = [
     "PL",
     "TRY",
     "FLY",
-    # "NPY",
-    # "AIR",
+    "NPY",
+    "AIR",
     "PERF",
-    # "FURB",
-    # "LOG",
+    "FURB",
+    "LOG",
     "RUF",
 ]
 ignore = [
@@ -123,6 +123,7 @@ ignore = [
     "SIM102", # sometimes it's better to nest
     "PLC2401", # variable name contains a non-ASCII character
     "PLC2403", # import name with-non-ascii-import-name
+    # "COM812",
     # of types for comparison.
     # Deactivated because it can make the code slow:
     # https://github.com/astral-sh/ruff/issues/7871
@@ -176,6 +177,7 @@ dependencies = [
     "django-cors-headers==4.9.0",
     "django-crispy-forms==2.5",
     "django-environ==0.12.0",
+    "django-grappelli>=4.0.3",
     "django-model-utils==5.0.0",
     "django-redis==6.0.0",
     "django-storages[s3]==1.14.6",
@@ -192,6 +194,7 @@ dependencies = [
     "python-slugify==8.0.4",
     "rcssmin==1.1.2",
     "redis==7.0.1",
+    "tqdm>=4.67.1",
     "uvicorn-worker==0.4.0",
     "uvicorn[standard]==0.38.0",
     "whitenoise==6.11.0",
