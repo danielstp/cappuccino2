@@ -22,7 +22,10 @@ def test_gestion_pk_generation():
     # Create a new Gestión instance
     # Note: We don't save it yet to check if save() populates the ID
     gestion = Gestión(
-        año=2025, semestre="1", inicio=date(2025, 1, 20), fin=date(2025, 6, 20),
+        año=2025,
+        semestre="1",
+        inicio=date(2025, 1, 20),
+        fin=date(2025, 6, 20),
     )
 
     print(f"Before save: id={gestion.id}")
