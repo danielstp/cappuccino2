@@ -23,7 +23,7 @@ class MateriaAdmin(admin.ModelAdmin):
         "código",
         "nombre",
     )
-    list_filter = ("código",)
+    list_filter = ("código", "nivelmateria__carrera")
     search_fields = (
         "código",
         "nombre",
@@ -61,9 +61,22 @@ class AulaAdmin(admin.ModelAdmin):
 
 
 class HorarioAdmin(admin.ModelAdmin):
-    list_display = ("código", "nombre")
-    list_filter = ("carrera",)
-    search_fields = ("código", "nombre", "carrera__nombre")
+    list_display = ("código", "día", "inicio", "aula", "grupo", "grupo__docente")
+    list_filter = (
+        "aula",
+        "día",
+        "inicio",
+        "fin",
+        "grupo__materia__nivelmateria__carrera",
+        "grupo__materia",
+        "grupo__docente",
+        "grupo__ayudante",
+    )
+    search_fields = (
+        "código",
+        "nombre",
+        "grupo__materia__nivelmateria__carrera__nombre",
+    )
 
 
 admin.site.register(Actualización)
@@ -75,4 +88,4 @@ admin.site.register(Materia, MateriaAdmin)
 admin.site.register(NivelMateria, NivelMateriaAdmin)
 admin.site.register(Aula, AulaAdmin)
 admin.site.register(Grupo, GrupoAdmin)
-admin.site.register(Horario)
+admin.site.register(Horario, HorarioAdmin)
