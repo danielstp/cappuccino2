@@ -1,8 +1,29 @@
+import logging
 from datetime import datetime as dt
 from datetime import timedelta
 
 from django.db import models
 from django.utils.timezone import get_default_timezone
+from django.core.management.base import BaseCommand
+from django.conf import settings
+
+# Configure structured logging
+logger = logging.getLogger(__name__)
+
+
+# Define ANSI color codes as constants for easier use
+class Color:
+    PURPLE = "\033[95m"
+    CYAN = "\033[96m"
+    DARKCYAN = "\033[36m"
+    BLUE = "\033[94m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    RED = "\033[91m"
+    BOLD = "\033[1m"
+    UNDERLINE = "\033[4m"
+    END = "\033[0m"  # Resets color to default
+
 
 LUNES = dt(2024, 12, 23, 0, 0, 0, tzinfo=get_default_timezone())
 
@@ -110,7 +131,7 @@ class Actualización(models.Model):
 
 
 class Docente(models.Model):
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ("nombre",)
@@ -121,7 +142,7 @@ class Docente(models.Model):
 
 
 class Ayudante(models.Model):
-    nombre = models.CharField(max_length=255)
+    nombre = models.CharField(max_length=255, unique=True)
 
     class Meta:
         ordering = ("nombre",)
@@ -199,10 +220,18 @@ class Grupo(models.Model):
     grupo = models.CharField(max_length=2)
     materia = models.ForeignKey(Materia, on_delete=models.PROTECT)
     docente = models.ForeignKey(
-        Docente, blank=True, null=True, default=None, on_delete=models.PROTECT,
+        Docente,
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.PROTECT,
     )
     ayudante = models.ForeignKey(
-        Ayudante, blank=True, null=True, default=None, on_delete=models.PROTECT,
+        Ayudante,
+        blank=True,
+        null=True,
+        default=None,
+        on_delete=models.PROTECT,
     )
     actualización = models.ForeignKey(Actualización, on_delete=models.PROTECT)
 
@@ -222,11 +251,12 @@ class Grupo(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.código:
-            print("Generando código")
-            print(f"Grupo: {self.grupo}")
-            print(f"Materia: {self.materia}")
-            print(f"Actualización: {self.actualización}")
-            print(f"Generando ID: {self.genera_id()}")
+            if settings.DEBUG:
+                print(Color.YELLOW + "Generando código")
+                print(Color.BLUE + f"Grupo: {self.grupo}")
+                print(Color.DARKCYAN + f"Materia: {self.materia}")
+                print(Color.CYAN + f"Actualización: {self.actualización}")
+                print(Color.RED + f"Generando ID: {self.genera_id()}" + Color.END)
             self.código = self.genera_id()
         super().save(*args, **kwargs)
 
@@ -243,7 +273,7 @@ class Grupo(models.Model):
 
 
 class Horario(models.Model):
-    código = models.CharField(max_length=25, primary_key=True)
+    código = models.CharField(max_length=45, primary_key=True)
     día = models.CharField(max_length=2, choices=DÍA_SEMANA)
     inicio = models.TimeField()
     fin = models.TimeField()
@@ -251,14 +281,17 @@ class Horario(models.Model):
     grupo = models.ForeignKey(Grupo, on_delete=models.PROTECT)
 
     class Meta:
-        ordering = ("grupo",)
+        ordering = ("grupo", "aula", "día", "inicio", "fin")
         indexes = [
             models.Index(fields=["código"]),
             models.Index(fields=["día"]),
-            models.Index(fields=["inicio"]),
-            models.Index(fields=["fin"]),
             models.Index(fields=["aula"]),
             models.Index(fields=["grupo"]),
+            models.Index(fields=["día", "aula"]),
+            models.Index(fields=["día", "grupo"]),
+            models.Index(fields=["día", "aula", "grupo"]),
+            models.Index(fields=["día", "aula", "grupo", "inicio"]),
+            models.Index(fields=["día", "aula", "grupo", "fin"]),
         ]
 
     def __str__(self):
@@ -270,4 +303,6 @@ class Horario(models.Model):
         super().save(*args, **kwargs)
 
     def genera_id(self):
-        return f"{self.día}-{self.grupo.materia.nombre}-{self.grupo.grupo}"
+        id = f"{self.día}-{self.inicio.strftime('%H%M')}-{self.grupo.código}"
+        print(f"{Color.YELLOW}{Color.BOLD}{id = }{Color.END}")
+        return id

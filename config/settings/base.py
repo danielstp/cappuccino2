@@ -30,10 +30,10 @@ LANGUAGE_CODE = "es-bo"
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 # from django.utils.translation import gettext_lazy as _
 LANGUAGES = [
-    ('es-bo', _('Spanish')),
-    ('en', _('English')),
-#     ('fr-fr', _('French')),
-#     ('pt-br', _('Portuguese')),
+    ("es-bo", _("Spanish")),
+    ("en", _("English")),
+    #     ('fr-fr', _('French')),
+    #     ('pt-br', _('Portuguese')),
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1

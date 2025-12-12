@@ -48,21 +48,20 @@ class Command(BaseCommand):
     TIMEOUT: Final[int] = getattr(settings, "TIMEOUT", 30)
 
     # Compiled Regex Patterns
-    PATRON_CODIGO: Final[re.Pattern] = re.compile(r"^(\d+)\s+(.*)$")
-    PATRON_NIVEL: Final[re.Pattern] = re.compile(
-        r"^Plan:[\s\d\w\(\)]+Nivel de Estudios:\s*([A-J])$",
-    )
-    PATRON_HORA: Final[re.Pattern] = re.compile(r"(\d{1,2})(\d{2})$")
     PATRON_SEMESTRE_ANO: Final[re.Pattern] = re.compile(r"HORARIOS\s+(\d+)-(\d+)")
-    PATRON_CARRERA_INFO: Final[re.Pattern] = re.compile(r"^(\d+)\s(\w[\w ()]+)$")
+    PATRON_CARRERA_INFO: Final[re.Pattern] = re.compile(r"^(\d+)\s(\w[\w\- ()]+)$")
 
     # Complex patterns with flags
     PATRON_DÍA: Final[re.Pattern] = re.compile(
-        r"^(?P<grupo>\d?[A-Z]?[\d]{0,2})(?:\s*(?P<ayudante>\[[PT]{1,2}\]))?\s*(?P<docente>[A-ZÑ][A-ZÑ\s\.]{6,49}[\w\.])\s+(?P<día>LU|MA|MI|JU|VI|SA|DO)\s+(?P<hora_inicio>(6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)(00|15|30|45))\s?-(?P<hora_fin>(08|09|10|11|12|13|14|15|16|17|18|19|20|21)(00|15|30|45))\s+(?P<aula>\w?\d[\d\w]+|AULVIR|ALIM)",
+        r"^(?P<grupo>\d?[A-Z]?[\d]{0,2})(?:\s*(?P<ayudante>\[[PT]{1,2}\]))?\s*"
+        r"(?P<docente>[A-ZÑ][A-ZÑ\s\.]{6,49}[\w\.])\s+(?P<día>LU|MA|MI|JU|VI|SA|DO)\s+"
+        r"(?P<hora_inicio>(6|7|8|9|10|11|12|13|14|15|16|17|18|19|20)(00|15|30|45))\s?-"
+        r"(?P<hora_fin>(08|09|10|11|12|13|14|15|16|17|18|19|20|21)(00|15|30|45))\s+"
+        r"(?P<aula>\w?\d[\d\w]+|AULVIR|ALIM)",
         flags=re.MULTILINE + re.IGNORECASE + re.UNICODE,
     )
     PATRON_MATERIA_LINE: Final[re.Pattern] = re.compile(
-        r"\s*(?P<nivel>[A-M])\s+(?P<código>\d{5,9})\s+(?P<materia>\w[\w\- ]{5,85}\w)",
+        r"^(?P<nivel>[A-K])\s+(?P<código>\d{5,9})\s+(?P<materia>\w[\w\- ()]{5,60}\w)$",
         flags=re.MULTILINE + re.IGNORECASE + re.UNICODE,
     )
     PATRON_CABECERA: Final[re.Pattern] = re.compile(
@@ -132,8 +131,9 @@ class Command(BaseCommand):
 
     def _cargar_datos_de_origen(self) -> None:
         """Downloads PDF schedules from the FCYT UMSS website."""
-        logger.info(self.style.SQL_KEYWORD("Descargando horarios de: %s ..."),
-        self.URL_HORARIOS)
+        logger.info(
+            self.style.SQL_KEYWORD("Descargando horarios de: %s ..."), self.URL_HORARIOS
+        )
 
         try:
             response_text = requests.get(self.URL_HORARIOS, timeout=self.TIMEOUT).text
@@ -157,8 +157,11 @@ class Command(BaseCommand):
             semestre, año = self.PATRON_SEMESTRE_ANO.findall(semestre_raw)[0]
             semestre, año = int(semestre), int(año)
 
-            logger.info(self.style.SQL_KEYWORD("Procesando Semestre: %s, Año: %s"),
-            semestre, año)
+            logger.info(
+                self.style.SQL_KEYWORD("Procesando Semestre: %s, Año: %s"),
+                semestre,
+                año,
+            )
 
             carreras_xp = carreras_html.xpath(
                 "//table//tr/td[contains(@class, 'normal')]/table//tr",
@@ -188,7 +191,7 @@ class Command(BaseCommand):
                     ),
                 )
 
-            max_workers = min(len(tasks), 1)
+            max_workers = min(len(tasks), 16)
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = [
                     executor.submit(self._process_carrera_entry, *task)
@@ -209,7 +212,12 @@ class Command(BaseCommand):
             raise CommandError(msg) from e
 
     def _process_carrera_entry(
-        self, carrera_raw: str, fecha_str: str, pdf_url: str, semestre: int, año: int,
+        self,
+        carrera_raw: str,
+        fecha_str: str,
+        pdf_url: str,
+        semestre: int,
+        año: int,
     ) -> None:
         """Processes a single career entry from the main page."""
         fecha = timezone.make_aware(
@@ -219,14 +227,18 @@ class Command(BaseCommand):
 
         match = self.PATRON_CARRERA_INFO.findall(carrera_raw)
         if not match:
-            logger.warning(self.style.WARNING("Could not parse career info: %s"),
-            carrera_raw,
+            logger.warning(
+                self.style.WARNING("Could not parse career info: %s"),
+                carrera_raw,
             )
             return
 
         código, nombre = match[0]
-        logger.info(self.style.SUCCESS("Found Carrera: %s (%s) - PDF: %s"), nombre,
-        código, pdf_url,
+        logger.info(
+            self.style.SUCCESS("Found Carrera: %s (%s) - PDF: %s"),
+            nombre,
+            código,
+            pdf_url,
         )
 
         carrera, actualización = self._create_or_update_carrera(
@@ -265,7 +277,8 @@ class Command(BaseCommand):
         )
         if created_a:
             logger.info(
-                self.style.SUCCESS("Nueva Actualización creada: %s"), actualización,
+                self.style.SUCCESS("Nueva Actualización creada: %s"),
+                actualización,
             )
 
         carrera, created_c = Carrera.objects.get_or_create(
@@ -295,7 +308,8 @@ class Command(BaseCommand):
                     )
                     actualización.fecha_pdf = fecha_pdf
                     logger.info(
-                        self.style.SUCCESS("Fecha actualizada del PDF: %s"), fecha_pdf,
+                        self.style.SUCCESS("Fecha actualizada del PDF: %s"),
+                        fecha_pdf,
                     )
 
             output_dir = (
@@ -303,6 +317,12 @@ class Command(BaseCommand):
             )
             output_dir.mkdir(parents=True, exist_ok=True)
             output_path = output_dir / f"{actualización.id}.pdf"
+
+            if output_path.exists():
+                logger.info(
+                    self.style.SUCCESS("El archivo PDF ya existe: %s"), output_path
+                )
+                return
 
             with output_path.open("wb") as f:
                 c = pycurl.Curl()
@@ -362,7 +382,8 @@ class Command(BaseCommand):
 
             except Actualización.DoesNotExist:
                 logger.warning(
-                    "No se encontró una Actualización para %s", carrera.nombre,
+                    "No se encontró una Actualización para %s",
+                    carrera.nombre,
                 )
             except Exception:
                 logger.exception("Error al convertir recursos para %s", carrera.nombre)
@@ -378,7 +399,7 @@ class Command(BaseCommand):
 
         # Use ThreadPoolExecutor for parallel processing
         # Adjust max_workers based on DB connection limits and CPU
-        max_workers = min(len(carreras), 1)
+        max_workers = min(len(carreras), 8)
 
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             future_to_carrera = {
@@ -417,20 +438,21 @@ class Command(BaseCommand):
                 txt = "\n".join(pdftotext.PDF(f, raw=True))
                 # Fix encoding issues (sed replacement)
                 txt = txt.replace("¥", "Ñ")
-                #with Path.open(base_path / f"{actualización.id}.txt", "w") as f:
+                # with Path.open(base_path / f"{actualización.id}.txt", "w") as f:
                 #    f.write(txt)
                 self._harvest_data(txt, carrera, actualización)
         except Actualización.DoesNotExist:
             logger.warning("No Actualización found for %s", carrera.nombre)
 
     def _harvest_data(
-        self, content: str, carrera: Carrera, actualización: Actualización,
+        self,
+        content: str,
+        carrera: Carrera,
+        actualización: Actualización,
     ) -> None:
         """Reads and parses the text file."""
         logger.info(self.style.HTTP_REDIRECT("Extrayendo datos de %s"), carrera.nombre)
-        base_path = (
-            Path(settings.STATIC_ROOT) / f"{carrera.nombre}_{carrera.código}"
-        )
+        base_path = Path(settings.STATIC_ROOT) / f"{carrera.nombre}_{carrera.código}"
         # Remover cabecera, título y pie
         full_text = self.PATRON_CABECERA.sub("", content)
         full_text = self.PATRON_TÍTULO.sub("", full_text)
@@ -450,9 +472,13 @@ class Command(BaseCommand):
         """Processes a block of text containing subjects (Materias)."""
         matches = list(self.PATRON_MATERIA_LINE.finditer(text))
 
-        self.stdout.write(self.style.HTTP_REDIRECT("Encontrado %d materias para %s" % (len(matches), carrera.nombre)))
+        self.stdout.write(
+            self.style.SQL_KEYWORD(
+                "Encontrado %d materias para %s" % (len(matches), carrera.nombre)
+            )
+        )
+        self.stdout.write(self.style.WARNING("Matches:"))
         pprint(matches)
-        self.stdout.write(self.style.HTTP_REDIRECT("```%s```" % text))
         for i in range(len(matches)):
             match = matches[i]
             start = match.end()
@@ -501,12 +527,12 @@ class Command(BaseCommand):
             data = match.groupdict()
             data["actualización"] = actualización
             data["materia"] = materia
-            self._create_schedule_entry(data)
+            self._crear_horario(data)
 
-    def _create_schedule_entry(self, data: dict[str, Any]) -> None:
+    def _crear_horario(self, data: dict[str, Any]) -> None:
         """Creates the schedule entry in the database."""
         # Handle Docente/Ayudante
-        docente_name = data["docente"]
+        docente_name = data["docente"].replace("\n", " ").strip()
         is_docente = True
         docente = None
         self.stdout.write(self.style.HTTP_REDIRECT(f"Data: {data}"))
@@ -556,12 +582,15 @@ class Command(BaseCommand):
             )
             return
 
+        defaults = {
+            "fin": hora_fin,
+            "aula": aula,
+        }
         # Create Horario
         horario, horario_creado = Horario.objects.get_or_create(
             grupo=grupo,
             día=data["día"],
             inicio=hora_inicio,
-            fin=hora_fin,
             defaults=defaults,
         )
         if horario_creado:
