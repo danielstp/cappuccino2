@@ -29,7 +29,7 @@ django.setup()
 # -- Project information -----------------------------------------------------
 
 project = "Cappuccino2"
-copyright = """2025, Daniel Saguez Tezanos Pinto"""  # noqa: A001
+copyright = """2026, Daniel Saguez Tezanos Pinto"""  # noqa: A001
 author = "Daniel Saguez Tezanos Pinto"
 
 
