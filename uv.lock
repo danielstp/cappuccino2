@@ -185,7 +185,7 @@ dev = [
 requires-dist = [
     { name = "argon2-cffi", specifier = "==25.1.0" },
     { name = "crispy-bootstrap5", specifier = "==2025.6" },
-    { name = "django", specifier = "==5.2.10" },
+    { name = "django", specifier = "==6.0.1" },
     { name = "django-allauth", extras = ["mfa"], specifier = "==65.14.0" },
     { name = "django-anymail", extras = ["mailgun"], specifier = "==14.0" },
     { name = "django-compressor", specifier = "==4.6.0" },
@@ -200,17 +200,17 @@ requires-dist = [
     { name = "drf-spectacular", specifier = "==0.29.0" },
     { name = "gunicorn", specifier = "==24.1.1" },
     { name = "hiredis", specifier = "==3.3.0" },
-    { name = "pillow", specifier = "==12.1.0" },
-    { name = "psycopg", extras = ["c"], specifier = "==3.3.2" },
     { name = "parsel", specifier = ">=1.10.0" },
     { name = "pdftotext", specifier = ">=3.0.0" },
+    { name = "pillow", specifier = "==12.1.0" },
+    { name = "psycopg", extras = ["c"], specifier = "==3.3.2" },
     { name = "pycurl", specifier = ">=7.45.7" },
     { name = "pydotplus", specifier = ">=2.0.2" },
     { name = "python-slugify", specifier = "==8.0.4" },
     { name = "rcssmin", specifier = "==1.2.2" },
     { name = "redis", specifier = "==7.1.0" },
-    { name = "uvicorn", extras = ["standard"], specifier = "==0.40.0" },
     { name = "tqdm", specifier = ">=4.67.1" },
+    { name = "uvicorn", extras = ["standard"], specifier = "==0.40.0" },
     { name = "uvicorn-worker", specifier = "==0.4.0" },
     { name = "whitenoise", specifier = "==6.11.0" },
 ]
@@ -456,16 +456,16 @@ wheels = [
 
 [[package]]
 name = "django"
-version = "5.2.10"
+version = "6.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "asgiref" },
     { name = "sqlparse" },
     { name = "tzdata", marker = "sys_platform == 'win32'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/e6/e5/2671df24bf0ded831768ef79532e5a7922485411a5696f6d979568591a37/django-5.2.10.tar.gz", hash = "sha256:74df100784c288c50a2b5cad59631d71214f40f72051d5af3fdf220c20bdbbbe", size = 10880754, upload-time = "2026-01-06T18:55:26.817Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b5/9b/016f7e55e855ee738a352b05139d4f8b278d0b451bd01ebef07456ef3b0e/django-6.0.1.tar.gz", hash = "sha256:ed76a7af4da21551573b3d9dfc1f53e20dd2e6c7d70a3adc93eedb6338130a5f", size = 11069565, upload-time = "2026-01-06T18:55:53.069Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fa/de/f1a7cd896daec85832136ab509d9b2a6daed4939dbe26313af3e95fc5f5e/django-5.2.10-py3-none-any.whl", hash = "sha256:cf85067a64250c95d5f9067b056c5eaa80591929f7e16fbcd997746e40d6c45c", size = 8290820, upload-time = "2026-01-06T18:55:20.009Z" },
+    { url = "https://files.pythonhosted.org/packages/95/b5/814ed98bd21235c116fd3436a7ed44d47560329a6d694ec8aac2982dbb93/django-6.0.1-py3-none-any.whl", hash = "sha256:a92a4ff14f664a896f9849009cb8afaca7abe0d6fc53325f3d1895a15253433d", size = 8338791, upload-time = "2026-01-06T18:55:46.175Z" },
 ]
 
 [[package]]
@@ -1073,6 +1073,7 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/a9/0b/c59d45de56a51bd2d3a401fc63449c0ac163e4ef7f523ea8b0c0dee86ec5/librt-0.7.8-cp313-cp313-win_amd64.whl", hash = "sha256:f8f4a901a3fa28969d6e4519deceab56c55a09d691ea7b12ca830e2fa3461e34", size = 50262, upload-time = "2026-01-14T12:55:33.01Z" },
     { url = "https://files.pythonhosted.org/packages/fc/b9/973455cec0a1ec592395250c474164c4a58ebf3e0651ee920fef1a2623f1/librt-0.7.8-cp313-cp313-win_arm64.whl", hash = "sha256:43d4e71b50763fcdcf64725ac680d8cfa1706c928b844794a7aa0fa9ac8e5f09", size = 43600, upload-time = "2026-01-14T12:55:34.054Z" },
 ]
+
 [[package]]
 name = "lxml"
 version = "6.0.2"
