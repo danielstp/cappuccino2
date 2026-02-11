@@ -185,7 +185,7 @@ dependencies = [
     "drf-spectacular==0.29.0",
     "gunicorn==24.1.1",
     "hiredis==3.3.0",
-    "pillow==12.1.0",
+    "pillow==12.1.1",
     "psycopg[c]==3.3.2",
     "parsel>=1.10.0",
     "pdftotext>=3.0.0",
