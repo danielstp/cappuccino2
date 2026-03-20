@@ -1,26 +1,46 @@
-from rest_framework import status
-from rest_framework.decorators import action
-from rest_framework.mixins import ListModelMixin
-from rest_framework.mixins import RetrieveModelMixin
-from rest_framework.mixins import UpdateModelMixin
-from rest_framework.response import Response
-from rest_framework.viewsets import GenericViewSet
+from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
+from ninja import Router
 
+from cappuccino2.users.api.schema import UpdateUserSchema
+from cappuccino2.users.api.schema import UserSchema
 from cappuccino2.users.models import User
 
-from .serializers import UserSerializer
+router = Router(tags=["users"])
 
 
-class UserViewSet(RetrieveModelMixin, ListModelMixin, UpdateModelMixin, GenericViewSet):
-    serializer_class = UserSerializer
-    queryset = User.objects.all()
-    lookup_field = "pk"
+def _get_users_queryset(request) -> QuerySet[User]:
+    return User.objects.filter(pk=request.user.pk)
 
-    def get_queryset(self, *args, **kwargs):
-        assert isinstance(self.request.user.id, int)
-        return self.queryset.filter(id=self.request.user.id)
 
-    @action(detail=False)
-    def me(self, request):
-        serializer = UserSerializer(request.user, context={"request": request})
-        return Response(status=status.HTTP_200_OK, data=serializer.data)
+@router.get("/", response=list[UserSchema])
+def list_users(request):
+    return _get_users_queryset(request)
+
+
+@router.get("/me/", response=UserSchema)
+def retrieve_current_user(request):
+    return request.user
+
+
+@router.get("/{pk}/", response=UserSchema)
+def retrieve_user(request, pk: int):
+    users_qs = _get_users_queryset(request)
+    return get_object_or_404(users_qs, pk=pk)
+
+
+@router.patch("/me/", response=UserSchema)
+def update_current_user(request, data: UpdateUserSchema):
+    user = request.user
+    user.name = data.name
+    user.save()
+    return user
+
+
+@router.patch("/{pk}/", response=UserSchema)
+def update_user(request, pk: int, data: UpdateUserSchema):
+    users_qs = _get_users_queryset(request)
+    user = get_object_or_404(users_qs, pk=pk)
+    user.name = data.name
+    user.save()
+    return user

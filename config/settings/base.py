@@ -1,7 +1,6 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
-
 from pathlib import Path
 
 import environ
@@ -84,10 +83,7 @@ THIRD_PARTY_APPS = [
     "allauth.account",
     "allauth.mfa",
     "allauth.socialaccount",
-    "rest_framework",
-    "rest_framework.authtoken",
     "corsheaders",
-    "drf_spectacular",
 ]
 
 LOCAL_APPS = [
@@ -238,7 +234,7 @@ EMAIL_TIMEOUT = 5
 # Django Admin URL.
 ADMIN_URL = "admin/"
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-ADMINS = [("""Daniel Saguez Tezanos Pinto""", "danielstp@gmail.com")]
+ADMINS = ['"Daniel Saguez Tezanos Pinto" <danielstp@gmail.com>']
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 # https://cookiecutter-django.readthedocs.io/en/latest/settings.html#other-environment-settings
@@ -296,29 +292,6 @@ SOCIALACCOUNT_FORMS = {"signup": "cappuccino2.users.forms.UserSocialSignupForm"}
 # https://django-compressor.readthedocs.io/en/latest/quickstart/#installation
 INSTALLED_APPS += ["compressor"]
 STATICFILES_FINDERS += ["compressor.finders.CompressorFinder"]
-# django-rest-framework
-# -------------------------------------------------------------------------------
-# django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
-REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.TokenAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
-    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-}
 
-# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
-CORS_URLS_REGEX = r"^/api/.*$"
-
-# By Default swagger ui is available only to admin user(s). You can change permission classes to change that
-# See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
-SPECTACULAR_SETTINGS = {
-    "TITLE": "Cappuccino2 API",
-    "DESCRIPTION": "Documentation of API endpoints of Cappuccino2",
-    "VERSION": "1.0.0",
-    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
-    "SCHEMA_PATH_PREFIX": "/api/",
-}
 # Your stuff...
 # ------------------------------------------------------------------------------
