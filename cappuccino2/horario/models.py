@@ -2,10 +2,9 @@ import logging
 from datetime import datetime as dt
 from datetime import timedelta
 
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import get_default_timezone
-from django.core.management.base import BaseCommand
-from django.conf import settings
 
 # Configure structured logging
 logger = logging.getLogger(__name__)

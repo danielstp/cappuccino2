@@ -12,10 +12,37 @@ from .models import Materia
 from .models import NivelMateria
 
 
+class GrupoInline(admin.TabularInline):
+    model = Grupo
+
+
+class MateriaInline(admin.TabularInline):
+    model = Materia
+
+
+class HorarioInline(admin.TabularInline):
+    model = Horario
+
+
 class GrupoAdmin(admin.ModelAdmin):
-    list_display = ("código", "grupo", "materia", "actualización")
-    list_filter = ("materia", "actualización")
+    list_display = ("código", "grupo", "materia", "docente", "actualización")
+    list_filter = (
+        "materia",
+        "docente",
+        "actualización",
+        "materia__nombre",
+        "actualización__fecha",
+    )
     search_fields = ("código", "materia__nombre", "actualización__fecha")
+    inlines = [HorarioInline]
+
+
+class CarreraInline(admin.TabularInline):
+    model = Carrera
+
+
+class NivelMateriaInline(admin.TabularInline):
+    model = NivelMateria
 
 
 class MateriaAdmin(admin.ModelAdmin):
@@ -28,6 +55,7 @@ class MateriaAdmin(admin.ModelAdmin):
         "código",
         "nombre",
     )
+    inlines = [NivelMateriaInline, GrupoInline]
 
 
 class NivelMateriaAdmin(admin.ModelAdmin):
@@ -40,6 +68,7 @@ class CarreraAdmin(admin.ModelAdmin):
     list_display = ("código", "nombre")
     list_filter = ("nombre",)
     search_fields = ("código", "nombre")
+    inlines = [NivelMateriaInline]
 
 
 class DocenteAdmin(admin.ModelAdmin):
@@ -47,17 +76,25 @@ class DocenteAdmin(admin.ModelAdmin):
     list_filter = ("nombre",)
     search_fields = ("nombre",)
 
+    inlines = [
+        GrupoInline,
+    ]
+
 
 class AyudanteAdmin(admin.ModelAdmin):
     list_display = ("nombre",)
     list_filter = ("nombre",)
     search_fields = ("nombre",)
+    inlines = [
+        GrupoInline,
+    ]
 
 
 class AulaAdmin(admin.ModelAdmin):
     list_display = ("código",)
     list_filter = ("código",)
     search_fields = ("código",)
+    inlines = [HorarioInline]
 
 
 class HorarioAdmin(admin.ModelAdmin):

@@ -12,9 +12,21 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="sRyRqL7Bj8jxz8UD34FYhloIC0dAeqE3TE4vOesKUcqmpuX1UvMmZkokMirn3yqp",
 )
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
 
+FORCE_SCRIPT_NAME = "/cappuccino2"
+STATIC_URL = f"{FORCE_SCRIPT_NAME}/static/"
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "acutely-outbid-pointy.ngrok-free.dev",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost",
+    "http://127.0.0.1",
+    "https://acutely-outbid-pointy.ngrok-free.dev",  # note https://
+]
 # CACHES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches

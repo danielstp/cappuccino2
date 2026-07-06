@@ -4,10 +4,18 @@ from typing import TYPE_CHECKING
 
 import pytest
 
+if TYPE_CHECKING:
+    from pathlib import Path
+
 from merge_production_dotenvs_in_dotenv import merge
 
 if TYPE_CHECKING:
     from pathlib import Path
+
+
+@pytest.fixture
+def fixture_path(tmp_path: Path) -> Path:  # type hints still work
+    return tmp_path / "test.txt"
 
 
 @pytest.mark.parametrize(
