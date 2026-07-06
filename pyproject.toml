@@ -38,7 +38,7 @@ dependencies = [
   "redis==8.0.1",
   "tqdm>=4.68.3",
   "uvicorn-worker==0.4.0",
-  "uvicorn[standard]==0.49.0",
+  "uvicorn[standard]==0.50.2",
   "whitenoise==6.12.0",
 ]
 
@@ -49,7 +49,7 @@ dev = [
   "django-debug-toolbar==7.0.0",
   "django-extensions==4.1",
   "django-stubs[compatible-mypy]==6.0.6",
-  "djlint==1.40.2",
+  "djlint==1.40.3",
   "factory-boy==3.3.3",
   "ipdb==0.13.13",
   "mypy==2.1.0",
