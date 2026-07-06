@@ -1,11 +1,9 @@
 import logging
 import re
-import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from concurrent.futures import as_completed
 from datetime import datetime as dt
 from pathlib import Path
-from pprint import pprint
 from typing import Any
 from typing import Final
 from typing import NamedTuple
@@ -232,7 +230,9 @@ class Command(BaseCommand):
         año: int,
     ) -> None:
         """Processes a single career entry from the main page."""
-        fecha = timezone.make_aware(dt.strptime(fecha_str, self.FMT_FECHA))
+        fecha = dt.strptime(fecha_str, self.FMT_FECHA).replace(
+            tzinfo=timezone.get_current_timezone(),
+        )
 
         match = self.PATRON_CARRERA_INFO.findall(carrera_raw)
         if not match:
@@ -306,18 +306,16 @@ class Command(BaseCommand):
         url = self._ensure_https(actualización.url_pdf)
 
         try:
-            with urllib.request.urlopen(url) as u:
-                meta = u.info()
-                last_modified = meta.get("Last-Modified")
-                if last_modified:
-                    fecha_pdf = timezone.make_aware(
-                        dt.strptime(str(last_modified), self.FMT_FECHA_APACHE),
-                        timezone=timezone.get_current_timezone(),
-                    )
-                    actualización.fecha_pdf = fecha_pdf
-                    logger.info(
-                        self.style.SUCCESS(f"Fecha actualizada del PDF: {fecha_pdf}"),
-                    )
+            response = requests.head(url, timeout=self.TIMEOUT, allow_redirects=True)
+            last_modified = response.headers.get("Last-Modified")
+            if last_modified:
+                fecha_pdf = dt.strptime(
+                    str(last_modified), self.FMT_FECHA_APACHE,
+                ).replace(tzinfo=timezone.get_current_timezone())
+                actualización.fecha_pdf = fecha_pdf
+                logger.info(
+                    self.style.SUCCESS(f"Fecha actualizada del PDF: {fecha_pdf}"),
+                )
 
             output_dir = (
                 Path(settings.STATIC_ROOT) / f"{carrera.nombre}_{carrera.código}"
@@ -334,14 +332,14 @@ class Command(BaseCommand):
             with output_path.open("wb") as f:
                 c = pycurl.Curl()
                 c.setopt(c.URL, url)
-                c.setopt(c.NOPROGRESS, True)
+                c.setopt(c.NOPROGRESS, 1)
 
                 c.setopt(c.WRITEDATA, f)
-                c.setopt(c.FOLLOWLOCATION, True)
+                c.setopt(c.FOLLOWLOCATION, 1)
                 c.setopt(c.MAXREDIRS, 10)
                 c.setopt(c.TIMEOUT, self.TIMEOUT)
                 c.setopt(c.CONNECTTIMEOUT, self.TIMEOUT)
-                c.setopt(c.NOSIGNAL, True)
+                c.setopt(c.NOSIGNAL, 1)
                 try:
                     c.perform()
                 finally:
@@ -451,8 +449,6 @@ class Command(BaseCommand):
                 txt = "\n".join(pdftotext.PDF(f, physical=True))
                 # Fix encoding issues (sed replacement)
                 txt = txt.replace("¥", "Ñ")
-                # with Path.open(base_path / f"{actualización.id}.txt", "w") as f:
-                #    f.write(txt)
                 self._harvest_data(txt, carrera, actualización)
         except Actualización.DoesNotExist:
             logger.warning("No Actualización found for %s", carrera.nombre)
@@ -494,7 +490,7 @@ class Command(BaseCommand):
             ),
         )
         self.stdout.write(self.style.WARNING("Matches:"))
-        pprint(matches)
+        self.stdout.write(self.style.WARNING(str(matches)))
         for i in range(len(matches)):
             match = matches[i]
             start = match.end()
@@ -593,8 +589,12 @@ class Command(BaseCommand):
 
         # Parse times
         try:
-            hora_inicio = dt.strptime(data["hora_inicio"].strip(), "%H%M")
-            hora_fin = dt.strptime(data["hora_fin"].strip(), "%H%M")
+            hora_inicio = dt.strptime(
+                data["hora_inicio"].strip(), "%H%M",
+            ).replace(tzinfo=timezone.get_current_timezone())
+            hora_fin = dt.strptime(data["hora_fin"].strip(), "%H%M").replace(
+                tzinfo=timezone.get_current_timezone(),
+            )
         except ValueError:
             logger.warning(
                 self.style.WARNING(

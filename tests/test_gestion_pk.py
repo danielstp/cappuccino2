@@ -18,8 +18,6 @@ django.setup()
 
 
 def test_gestion_pk_generation():
-    print("Testing Gestión PK generation...")
-
     # Create a new Gestión instance
     # Note: We don't save it yet to check if save() populates the ID
     gestion = Gestión(
@@ -29,7 +27,7 @@ def test_gestion_pk_generation():
         fin=date(2025, 6, 20),
     )
 
-    print(f"Before save: id={gestion.id}")
+    # Before save, id should be None or empty
 
     # Save should trigger the ID generation
     # We use a transaction or just try/except because we might not have migrations

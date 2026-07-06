@@ -1,7 +1,10 @@
+from typing import TYPE_CHECKING
+
 from django.urls import resolve
 from django.urls import reverse
 
-from cappuccino2.users.models import User
+if TYPE_CHECKING:
+    from cappuccino2.users.models import User
 
 
 def test_detail(user: User):

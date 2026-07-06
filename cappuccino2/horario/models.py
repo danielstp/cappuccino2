@@ -251,11 +251,11 @@ class Grupo(models.Model):
     def save(self, *args, **kwargs):
         if not self.código:
             if settings.DEBUG:
-                print(Color.YELLOW + "Generando código")
-                print(Color.BLUE + f"Grupo: {self.grupo}")
-                print(Color.DARKCYAN + f"Materia: {self.materia}")
-                print(Color.CYAN + f"Actualización: {self.actualización}")
-                print(Color.RED + f"Generando ID: {self.genera_id()}" + Color.END)
+                logger.debug("Generando código")
+                logger.debug("Grupo: %s", self.grupo)
+                logger.debug("Materia: %s", self.materia)
+                logger.debug("Actualización: %s", self.actualización)
+                logger.debug("Generando ID: %s", self.genera_id())
             self.código = self.genera_id()
         super().save(*args, **kwargs)
 
@@ -302,6 +302,6 @@ class Horario(models.Model):
         super().save(*args, **kwargs)
 
     def genera_id(self):
-        id = f"{self.día}-{self.inicio.strftime('%H%M')}-{self.grupo.código}"
-        print(f"{Color.YELLOW}{Color.BOLD}{id = }{Color.END}")
-        return id
+        pk = f"{self.día}-{self.inicio.strftime('%H%M')}-{self.grupo.código}"
+        logger.debug("Generado ID: %s", pk)
+        return pk
