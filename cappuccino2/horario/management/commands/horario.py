@@ -310,7 +310,8 @@ class Command(BaseCommand):
             last_modified = response.headers.get("Last-Modified")
             if last_modified:
                 fecha_pdf = dt.strptime(
-                    str(last_modified), self.FMT_FECHA_APACHE,
+                    str(last_modified),
+                    self.FMT_FECHA_APACHE,
                 ).replace(tzinfo=timezone.get_current_timezone())
                 actualización.fecha_pdf = fecha_pdf
                 logger.info(
@@ -590,7 +591,8 @@ class Command(BaseCommand):
         # Parse times
         try:
             hora_inicio = dt.strptime(
-                data["hora_inicio"].strip(), "%H%M",
+                data["hora_inicio"].strip(),
+                "%H%M",
             ).replace(tzinfo=timezone.get_current_timezone())
             hora_fin = dt.strptime(data["hora_fin"].strip(), "%H%M").replace(
                 tzinfo=timezone.get_current_timezone(),
