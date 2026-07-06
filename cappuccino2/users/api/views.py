@@ -38,7 +38,7 @@ def retrieve_user(request, pk: int):
 @router.patch("/me/", response=UserSchema)
 def update_current_user(request, data: UpdateUserSchema):
     user = request.user
-    user.name = data.name
+    user.name = data.dict()["name"]
     user.save()
     return user
 
@@ -47,6 +47,6 @@ def update_current_user(request, data: UpdateUserSchema):
 def update_user(request, pk: int, data: UpdateUserSchema):
     users_qs = _get_users_queryset(request)
     user = get_object_or_404(users_qs, pk=pk)
-    user.name = data.name
+    user.name = data.dict()["name"]
     user.save()
     return user

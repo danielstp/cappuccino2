@@ -7,4 +7,4 @@ router = Router()
 
 app_name = "horario"
 
-urlpatterns = []
+urlpatterns: list = []

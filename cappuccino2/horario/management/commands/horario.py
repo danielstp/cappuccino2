@@ -547,7 +547,7 @@ class Command(BaseCommand):
         # Handle Docente/Ayudante
         docente_name = data["docente"].replace("\n", " ").strip()
         is_docente = True
-        docente = None
+        docente: Docente | Ayudante | None = None
         if docente_name in (
             "AGREDA CORRALES LUIS ROBERTO",
             "BLANCO COCA LETICIA",
@@ -567,7 +567,6 @@ class Command(BaseCommand):
             docente, docente_creado = Docente.objects.get_or_create(
                 nombre=docente_name,
             )
-            is_docente = True
             if docente_creado:
                 logger.info(self.style.SUCCESS(f"Docente creado: {docente}"))
 

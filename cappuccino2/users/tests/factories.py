@@ -32,7 +32,8 @@ class UserFactory(DjangoModelFactory[User]):
     @classmethod
     def _after_postgeneration(cls, instance, create, results=None):
         """Save again the instance if creating and at least one hook ran."""
-        if create and results and not cls._meta.skip_postgeneration_save:
+        skip_save = getattr(cls._meta, "skip_postgeneration_save", False)
+        if create and results and not skip_save:
             # Some post-generation hooks ran, and may have modified us.
             instance.save()
 
