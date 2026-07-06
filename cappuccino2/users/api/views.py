@@ -1,10 +1,16 @@
-from django.db.models import QuerySet
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from django.shortcuts import get_object_or_404
 from ninja import Router
 
 from cappuccino2.users.api.schema import UpdateUserSchema
 from cappuccino2.users.api.schema import UserSchema
 from cappuccino2.users.models import User
+
+if TYPE_CHECKING:
+    from django.db.models import QuerySet
 
 router = Router(tags=["users"])
 

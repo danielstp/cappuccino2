@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from http import HTTPStatus
+from typing import TYPE_CHECKING
 
 import pytest
 from django.conf import settings
@@ -8,16 +11,19 @@ from django.contrib.messages.middleware import MessageMiddleware
 from django.contrib.sessions.middleware import SessionMiddleware
 from django.http import HttpRequest
 from django.http import HttpResponseRedirect
-from django.test import RequestFactory
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 
 from cappuccino2.users.forms import UserAdminChangeForm
-from cappuccino2.users.models import User
 from cappuccino2.users.tests.factories import UserFactory
 from cappuccino2.users.views import UserRedirectView
 from cappuccino2.users.views import UserUpdateView
 from cappuccino2.users.views import user_detail_view
+
+if TYPE_CHECKING:
+    from django.test import RequestFactory
+
+    from cappuccino2.users.models import User
 
 pytestmark = pytest.mark.django_db
 

@@ -2,8 +2,8 @@
 # ------------------------------------------------------------------------------
 # DJANGO_READ_DOT_ENV_FILE=True
 DJANGO_SETTINGS_MODULE=config.settings.production
-DJANGO_SECRET_KEY=SIXL53k7h8mtAYZyTAjoUqFqbDUvCxJs5msonOJOHfkWowLWGVm7Z50FijpmtWV8
-DJANGO_ADMIN_URL=010Xtc9FwArlvMEjBkQ4UkoeRQOjxbG0/
+DJANGO_SECRET_KEY=TxBTOICxuT7lm18PtcMQgAq06fd9DEvSgtvPbquMF8Ya3k1Qs7TaS5C48OUl33Q6
+DJANGO_ADMIN_URL=zlyrUpGYeE9sa3srVN1XcXRbUwW6YKxl/
 DJANGO_ALLOWED_HOSTS=.capuchino-scesi.web.app
 
 # Security

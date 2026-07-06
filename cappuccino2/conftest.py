@@ -1,7 +1,13 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
 
-from cappuccino2.users.models import User
 from cappuccino2.users.tests.factories import UserFactory
+
+if TYPE_CHECKING:
+    from cappuccino2.users.models import User
 
 
 @pytest.fixture(autouse=True)

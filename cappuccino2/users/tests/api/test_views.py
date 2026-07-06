@@ -1,11 +1,17 @@
+from __future__ import annotations
+
 from http import HTTPStatus
+from typing import TYPE_CHECKING
 
 import pytest
-from django.test import Client
 from django.urls import reverse
 
-from cappuccino2.users.models import User
 from cappuccino2.users.tests.factories import UserFactory
+
+if TYPE_CHECKING:
+    from django.test import Client
+
+    from cappuccino2.users.models import User
 
 pytestmark = pytest.mark.django_db
 
